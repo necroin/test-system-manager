@@ -1,0 +1,129 @@
+[
+    {
+        "name": "Projects",
+        "fields": [
+            {
+                "name": "Id",
+                "type": "integer"
+            },
+            {
+                "name": "Name",
+                "type": "string"
+            }
+        ],
+        "primary_key": [
+            "Id"
+        ]
+    },
+    {
+        "name": "TSM_TestCase",
+        "fields": [
+            {
+                "name": "Id",
+                "type": "integer"
+            },
+            {
+                "name": "ProjectId",
+                "type": "integer"
+            },
+            {
+                "name": "Name",
+                "type": "string"
+            },
+            {
+                "name": "Description",
+                "type": "string",
+                "nullable": true
+            },
+            {
+                "name": "Scenario",
+                "type": "string",
+                "nullable": true
+            }
+        ],
+        "primary_key": [
+            "Id",
+            "ProjectId"
+        ]
+    },
+    {
+        "name": "TSM_TestPlan",
+        "fields": [
+            {
+                "name": "Id",
+                "type": "integer"
+            },
+            {
+                "name": "ProjectId",
+                "type": "integer"
+            },
+            {
+                "name": "Name",
+                "type": "string"
+            }
+        ],
+        "primary_key": [
+            "Id",
+            "ProjectId"
+        ]
+    },
+    {
+        "name": "TSM_TestPlanTestCase",
+        "fields": [
+            {
+                "name": "TestPlanId",
+                "type": "integer"
+            },
+            {
+                "name": "TestCaseId",
+                "type": "integer"
+            },
+            {
+                "name": "Position",
+                "type": "integer"
+            }
+        ],
+        "primary_key": [
+            "TestPlanId",
+            "TestCaseId"
+        ]
+    },
+    {
+        "name": "TSM_Stat",
+        "fields": [
+            {
+                "name": "TestRunId",
+                "type": "integer"
+            }
+        ],
+        "primary_key": [
+            "TestRunId"
+        ]
+    },
+    {
+        "name": "TSM_Tags",
+        "fields": [
+            {
+                "name": "ObjectId",
+                "type": "integer"
+            },
+            {
+                "name": "ObjectType",
+                "type": "string"
+            },
+            {
+                "name": "Name",
+                "type": "string"
+            },
+            {
+                "name": "Color",
+                "type": "string"
+            }
+        ],
+        "primary_key": [
+            "ObjectId",
+            "ObjectType",
+            "Name"
+        ]
+    }
+]

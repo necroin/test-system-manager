@@ -1,0 +1,123 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <!-- Style Place -->
+    %s
+    <!-- Script Place -->
+    %s
+    <title>TSM</title>
+</head>
+
+<body onload="window.GetTestCase()">
+    <div id="menu_bar">
+        <button class="menu_bar_button" onclick="window.OpenPage('/projects')">
+            <!-- Home -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                <title>Home</title>
+                <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
+            </svg>
+        </button>
+        <button class="menu_bar_button" onclick="window.OpenPage('/project/%s/cases')" style="background-color: gray;">
+            <!-- Test Cases -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                <title>Test Cases</title>
+                <path d="M3,4H7V8H3V4M9,5V7H21V5H9M3,10H7V14H3V10M9,11V13H21V11H9M3,16H7V20H3V16M9,17V19H21V17H9" />
+            </svg>
+        </button>
+        <button class="menu_bar_button" onclick="window.OpenPage('/project/%s/plans')">
+            <!-- Test Plans -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                <title>Test Plans</title>
+                <path
+                    d="M11 15H17V17H11V15M9 7H7V9H9V7M11 13H17V11H11V13M11 9H17V7H11V9M9 11H7V13H9V11M21 5V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H19C20.1 3 21 3.9 21 5M19 5H5V19H19V5M9 15H7V17H9V15Z" />
+            </svg>
+        </button>
+        <button class="menu_bar_button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                <title>Statistics</title>
+                <path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" />
+            </svg>
+        </button>
+        <div class="other-buttons">
+            <button class="menu_bar_button">
+                <!-- FAQ -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                    <title>FAQ</title>
+                    <path
+                        d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="main-area">
+        <div id="headline">
+            %s
+        </div>
+        <div class="horizontal-layout">
+            <div style="flex-grow: 1;">
+                <div class="test-page-element">
+                    <div class="edit-header">
+                        <span class="edit-header-text">Описание</span>
+                        <button onclick="window.Edit(this, 'description-text', 'description-text-area', 'description')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                                <title>Edit</title>
+                                <path
+                                    d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+                            </svg>
+                            <span style="display: none;">Сохранить</span>
+                        </button>
+                    </div>
+                    <span id="description-text" class="text" style="word-break: break-all;"></span>
+                    <span id="description-text-placeholder" class="text-placeholder">
+                        Нет описания
+                    </span>
+                    <textarea class="edit-textarea" id="description-text-area" style="display: none;"></textarea>
+                </div>
+                <div class="test-page-element">
+                    <div class="edit-header">
+                        <span class="edit-header-text">Сценарий</span>
+                        <button onclick="window.Edit(this, 'scenario-text', 'scenario-text-area', 'scenario')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                                <title>Edit</title>
+                                <path
+                                    d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+                            </svg>
+                            <span style="display: none;">Сохранить</span>
+                        </button>
+                    </div>
+                    <span id="scenario-text"style="word-break: break-all;"></span>
+                    <textarea class="edit-textarea" id="scenario-text-area" style="display: none;"></textarea>
+                </div>
+                <div class="test-page-element comments">
+                    <div class="edit-header">
+                        <span>Комментарии</span>
+                    </div>
+                    <textarea id="comment-text-area" class="edit-textarea"></textarea>
+                    <button>Комментировать</button>
+                </div>
+            </div>
+            <div class="test-page-element tags">
+                <div class="edit-header">
+                    <span class="edit-header-text">Тэги</span>
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                            <title>Edit</title>
+                            <path
+                                d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="tags-list">
+                    <span>Test tag 1</span>
+                    <span>Test tag 2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
