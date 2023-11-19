@@ -48,7 +48,6 @@ func (server *Server) ProjectPlanHandler(responseWriter http.ResponseWriter, req
 			server.url,
 		),
 		projectId,
-		testPlanId,
 		projectId,
 		projectId,
 		response.Records[0].Fields["Name"],

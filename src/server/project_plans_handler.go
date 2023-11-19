@@ -44,6 +44,8 @@ func (server *Server) ProjectPlansHandler(responseWriter http.ResponseWriter, re
 		projectId,
 		projectId,
 		projectId,
+		projectId,
+		projectId,
 		projectsResponse.Records[0].Fields["Name"],
 	)
 	responseWriter.Write([]byte(content))

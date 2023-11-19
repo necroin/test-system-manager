@@ -51,6 +51,7 @@ func (server *Server) ProjectCaseHandler(responseWriter http.ResponseWriter, req
 		),
 		projectId,
 		projectId,
+		projectId,
 		response.Records[0].Fields["Name"],
 	)
 	responseWriter.Write([]byte(content))
