@@ -33,7 +33,7 @@ func (database *Database) UpdateRequest(request *dbi.Request) *dbi.Response {
 		sqlCommand = sqlCommand + sqlFilters
 	}
 
-	logger.Info(sqlCommand)
+	logger.Verbose(sqlCommand)
 	_, err := database.sql.Exec(sqlCommand)
 	if err != nil {
 		response.Success = false

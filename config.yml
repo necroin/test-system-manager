@@ -2,4 +2,4 @@
 url: localhost:3301
 
 log_path: logs/logs.txt
-log_level: info
+log_level: verbose

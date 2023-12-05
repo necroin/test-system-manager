@@ -12,6 +12,16 @@
 </head>
 
 <body onload="window.GetTestPlans('%s')">
+    <div id="create-dialog-overlay" class="dialog-overlay">
+        <div id="create-dialog" class="dialog">
+            <span>Имя тест-плана</span>
+            <input id="create-dialog-name" type="text">
+            <div class="dialog-buttons">
+                <button onclick="window.close_dialog('create-dialog', 'create-dialog-overlay')">Отменить</button>
+                <button onclick="window.AddTestPlan('%s')">Создать</button>
+            </div>
+        </div>
+    </div>
     <div id="menu_bar">
         <button class="menu_bar_button" onclick="window.OpenPage('/projects')">
             <!-- Home -->
@@ -49,8 +59,8 @@
             </svg>
         </button>
         <div class="other-buttons">
-            <button class="menu_bar_button">
-                <!-- Add Project (Plus) -->
+            <button class="menu_bar_button" onclick="window.open_dialog('create-dialog', 'create-dialog-overlay')">
+                <!-- Add Test Plan (Plus) -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
                     <title>Add Test Plan</title>
                     <path

@@ -18,10 +18,55 @@ function OpenPage(path) {
     window.location.href = "http://" + window.request_url + path
 }
 
+function GetSearchLineText() {
+    let searchLine = document.getElementById("search-line-text")
+    return searchLine.value
+}
+
+function open_dialog(dialog, overlay) {
+    document.getElementById(dialog).style.display = "flex";
+    document.getElementById(overlay).style.display = "block";
+}
+
+function close_dialog(dialog, overlay) {
+    document.getElementById(dialog).style.display = "none";
+    document.getElementById(overlay).style.display = "none";
+}
+
+function AddProject() {
+    let name = document.getElementById("create-dialog-name").value
+    if (name != "") {
+        let response = post_request(window.location.href + "/insert", name)
+        GetProjects()
+        close_dialog('create-dialog', 'create-dialog-overlay')
+    }
+}
+
+function AddTestCase(projectId) {
+    let name = document.getElementById("create-dialog-name").value
+    if (name != "") {
+        let response = post_request(window.location.href + "/insert", name)
+        GetTestCases(projectId)
+        close_dialog('create-dialog', 'create-dialog-overlay')
+    }
+}
+
+function AddTestPlan(projectId) {
+    let name = document.getElementById("create-dialog-name").value
+    if (name != "") {
+        let response = post_request(window.location.href + "/insert", name)
+        GetTestPlans(projectId)
+        close_dialog('create-dialog', 'create-dialog-overlay')
+    }
+}
+
 function GetProjects() {
     let projectsList = document.getElementById("projects");
     projectsList.replaceChildren();
-    let response = post_request(window.request_url + "/projects/get")
+    let response = post_request(
+        window.request_url + "/projects/get",
+        JSON.stringify({ "search": GetSearchLineText() })
+    )
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
         var element = document.createElement("div");
@@ -29,15 +74,15 @@ function GetProjects() {
         var id = document.createElement("span");
         var name = document.createElement("span");
         var count = document.createElement("span");
-        id.innerHTML = records[recordIndex].fields.Id;
-        name.innerHTML = records[recordIndex].fields.Name;
-        count.innerHTML = records[recordIndex].fields.TestCaseCount;
+        id.innerText = records[recordIndex].fields.Id;
+        name.innerText = records[recordIndex].fields.Name;
+        count.innerText = records[recordIndex].fields.TestCaseCount;
 
         element.appendChild(id);
         element.appendChild(name);
         element.appendChild(count);
 
-        let projectId = id.innerHTML
+        let projectId = id.innerText
         element.onclick = () => OpenPage("/project/" + projectId + "/cases");
 
         projectsList.appendChild(element);
@@ -54,8 +99,8 @@ function GetTestCases(projectId) {
         element.className = "list-item"
         var id = document.createElement("span");
         var name = document.createElement("span");
-        id.innerHTML = records[recordIndex].fields.Id;
-        name.innerHTML = records[recordIndex].fields.Name;
+        id.innerText = records[recordIndex].fields.Id;
+        name.innerText = records[recordIndex].fields.Name;
 
         element.appendChild(id);
         element.appendChild(name);

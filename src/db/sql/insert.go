@@ -11,6 +11,7 @@ import (
 
 func (database *Database) Insert(table string, columns []string, values []string) error {
 	sqlCommand := fmt.Sprintf("INSERT OR REPLACE INTO %s (%s) VALUES (%s)", table, strings.Join(columns, ", "), strings.Join(values, ", "))
+	logger.Verbose(sqlCommand)
 	_, err := database.sql.Exec(sqlCommand)
 	if err != nil {
 		return fmt.Errorf("[Database] [Insert] [Error] failed database request: %s", err)

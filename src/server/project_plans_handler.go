@@ -3,9 +3,11 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"tsm/src/db/dbi"
+	"tsm/src/logger"
 	"tsm/src/settings"
 
 	"github.com/gorilla/mux"
@@ -41,6 +43,7 @@ func (server *Server) ProjectPlansHandler(responseWriter http.ResponseWriter, re
 			fmt.Sprintf(`<script type="text/javascript">%s</script>`, script),
 			server.url,
 		),
+		projectId,
 		projectId,
 		projectId,
 		projectId,
@@ -108,4 +111,41 @@ func (server *Server) ProjectPlansSelectHandler(responseWriter http.ResponseWrit
 	}
 
 	json.NewEncoder(responseWriter).Encode(projectTestCaseResponse)
+}
+
+func (server *Server) ProjectPlansInsertHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	projectId := params["id"]
+
+	name, err := io.ReadAll(request.Body)
+	if err != nil {
+		logger.Error(err)
+		responseWriter.Write([]byte(err.Error()))
+		return
+	}
+
+	projectsResponse := server.db.InsertRequest(&dbi.Request{
+		Table: "TSM_TestPlan",
+		Fields: []dbi.Field{
+			{
+				Name:  "Id",
+				Value: fmt.Sprintf("(select COALESCE((MAX(Id) + 1), 1) from TSM_TestPlan where ProjectId = %s)", projectId),
+			},
+			{
+				Name:  "ProjectId",
+				Value: projectId,
+			},
+			{
+				Name:  "Name",
+				Value: fmt.Sprintf("'%s'", string(name)),
+			},
+		},
+	})
+
+	if projectsResponse.Error != nil {
+		logger.Error(projectsResponse.Error)
+		projectsResponse.Success = false
+		json.NewEncoder(responseWriter).Encode(projectsResponse)
+		return
+	}
 }

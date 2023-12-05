@@ -39,12 +39,15 @@ func main() {
 
 	server.AddHandler(settings.ServerProjectsEndpoint, server.ProjectsHandler, "GET")
 	server.AddHandler(settings.ServerProjectsSelectEndpoint, server.ProjectsSelectHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectsInsertEndpoint, server.ProjectsInsertHandler, "POST", "GET")
 
 	server.AddHandler(settings.ServerProjectCasesEndpoint, server.ProjectCasesHandler, "GET")
 	server.AddHandler(settings.ServerProjectCasesSelectEndpoint, server.ProjectCasesSelectHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectCasesInsertEndpoint, server.ProjectCasesInsertHandler, "POST", "GET")
 
 	server.AddHandler(settings.ServerProjectPlansEndpoint, server.ProjectPlansHandler, "GET")
 	server.AddHandler(settings.ServerProjectPlansSelectEndpoint, server.ProjectPlansSelectHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectPlansInsertEndpoint, server.ProjectPlansInsertHandler, "POST", "GET")
 
 	server.AddHandler(settings.ServerProjectCaseEndpoint, server.ProjectCaseHandler, "GET")
 	server.AddHandler(settings.ServerProjectCaseSelectEndpoint, server.ProjectCaseSelectHandler, "POST", "GET")
