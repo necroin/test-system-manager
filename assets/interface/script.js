@@ -60,6 +60,20 @@ function AddTestPlan(projectId) {
     }
 }
 
+function AddProjectTag(projectId) {
+    let tag = document.getElementById("settings-tags-input").value
+    if (tag != "") {
+        let response = post_request(window.request_url + "/project/" + projectId + "/tags/insert", tag)
+        GetProjectSettings(projectId)
+    }
+}
+
+function GetProjectTags(projectId){
+    let response = post_request(window.request_url + "/project/" + projectId + "/tags/get")
+    let data = JSON.parse(response)
+    return data.records
+}
+
 function GetProjects() {
     let projectsList = document.getElementById("projects");
     projectsList.replaceChildren();
@@ -69,14 +83,15 @@ function GetProjects() {
     )
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
+        let record = records[recordIndex]
         var element = document.createElement("div");
         element.className = "list-item"
         var id = document.createElement("span");
         var name = document.createElement("span");
         var count = document.createElement("span");
-        id.innerText = records[recordIndex].fields.Id;
-        name.innerText = records[recordIndex].fields.Name;
-        count.innerText = records[recordIndex].fields.TestCaseCount;
+        id.innerText = record.fields.Id;
+        name.innerText = record.fields.Name;
+        count.innerText = record.fields.TestCaseCount;
 
         element.appendChild(id);
         element.appendChild(name);
@@ -95,12 +110,13 @@ function GetTestCases(projectId) {
     let response = post_request(window.request_url + "/project/" + projectId + "/cases/get");
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
-        var element = document.createElement("div");
+        let record = records[recordIndex]
+        let element = document.createElement("div");
         element.className = "list-item"
-        var id = document.createElement("span");
-        var name = document.createElement("span");
-        id.innerText = records[recordIndex].fields.Id;
-        name.innerText = records[recordIndex].fields.Name;
+        let id = document.createElement("span");
+        let name = document.createElement("span");
+        id.innerText = record.fields.Id;
+        name.innerText = record.fields.Name;
 
         element.appendChild(id);
         element.appendChild(name);
@@ -118,14 +134,15 @@ function GetTestPlans(projectId) {
     let response = post_request(window.request_url + "/project/" + projectId + "/plans/get");
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
-        var element = document.createElement("div");
+        let record = records[recordIndex]
+        let element = document.createElement("div");
         element.className = "list-item"
-        var id = document.createElement("span");
-        var name = document.createElement("span");
-        var count = document.createElement("span");
-        id.innerHTML = records[recordIndex].fields.Id;
-        name.innerHTML = records[recordIndex].fields.Name;
-        count.innerHTML = records[recordIndex].fields.TestCaseCount;
+        let id = document.createElement("span");
+        let name = document.createElement("span");
+        let count = document.createElement("span");
+        id.innerHTML = record.fields.Id;
+        name.innerHTML = record.fields.Name;
+        count.innerHTML = record.fields.TestCaseCount;
 
         element.appendChild(id);
         element.appendChild(name);
@@ -138,18 +155,10 @@ function GetTestPlans(projectId) {
     }
 }
 
-function GetSettings(projectId) {
-    let response = post_request(window.request_url + "/project/" + projectId + "/settings/get")
-    let data = JSON.parse(response)
-    console.log(data)
-
-    let collaboratorsList = document.getElementById("collaborators");
-    // collaboratorsList.replaceChildren()
-
-
+function GetProjectSettings(projectId) {
     let tagsList = document.getElementById("tags");
     tagsList.replaceChildren()
-    let tags = data.tags.records
+    let tags = GetProjectTags(projectId)
     for (tagIndex in tags) {
         let tag = tags[tagIndex]
         let tagElement = document.createElement("span")

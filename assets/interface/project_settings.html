@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet" type="text/css">
     <!-- Style Place -->
     %s
     <!-- Script Place -->
@@ -11,7 +10,7 @@
     <title>TSM</title>
 </head>
 
-<body onload="window.GetSettings('%s')">
+<body onload="window.GetProjectSettings('%s')">
     <div id="create-dialog-overlay" class="dialog-overlay">
         <div id="create-dialog" class="dialog">
             <span>Имя тест-кейса</span>
@@ -86,14 +85,10 @@
             <div class="settings-item">
                 <span class="settings-item-headline">Тэги</span>
                 <div>
-                    <input type="text" id="settings-collaborators-input">
-                    <button>Добавить</button>
+                    <input type="text" id="settings-tags-input">
+                    <button onclick="window.AddProjectTag('%s')">Добавить</button>
                 </div>
-                <div id ="tags" class="with-text-placeholder tags-list">
-                    <span>Test Tag 1</span>
-                    <span>Test Tag 2</span>
-                    <span>Test Tag 3</span>
-                </div>
+                <div id ="tags" class="with-text-placeholder tags-list"></div>
                 <span class="text-placeholder settings-item-content">Нет тэгов</span>
 
             </div>

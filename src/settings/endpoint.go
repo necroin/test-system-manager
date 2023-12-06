@@ -29,6 +29,8 @@ const (
 	ServerProjectStatisticsEndpoint       = "/project/{id:[0-9]+}/statistics"
 	ServerProjectStatisticsSelectEndpoint = "/project/{id:[0-9]+}/statistics/get"
 
-	ServerProjectSettingsEndpoint       = "/project/{id:[0-9]+}/settings"
-	ServerProjectSettingsSelectEndpoint = "/project/{id:[0-9]+}/settings/get"
+	ServerProjectSettingsEndpoint = "/project/{id:[0-9]+}/settings"
+
+	ServerProjectTagsSelectEndpoint = "/project/{id:[0-9]+}/tags/get"
+	ServerProjectTagsInsertEndpoint = "/project/{id:[0-9]+}/tags/insert"
 )
