@@ -92,6 +92,9 @@ function GetProjects() {
         id.innerText = record.fields.Id;
         name.innerText = record.fields.Name;
         count.innerText = record.fields.TestCaseCount;
+        count.style.minWidth = 100;
+        count.style.maxWidth = 100;
+
 
         element.appendChild(id);
         element.appendChild(name);
@@ -99,6 +102,17 @@ function GetProjects() {
 
         let projectId = id.innerText
         element.onclick = () => OpenPage("/project/" + projectId + "/cases");
+
+        var tagsElement = document.createElement("div")
+
+        let tags = GetProjectTags(projectId)
+        for(tagIndex in tags){
+            let tag = tags[tagIndex]
+            let tagElement = document.createElement("span")
+            tagElement.innerText = tag.fields.Name
+            tagsElement.appendChild(tagElement)
+        }
+        element.appendChild(tagsElement);
 
         projectsList.appendChild(element);
     }
