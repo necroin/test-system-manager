@@ -111,7 +111,6 @@ func (server *Server) ProjectCasesInsertHandler(responseWriter http.ResponseWrit
 
 	if projectsResponse.Error != nil {
 		logger.Error(projectsResponse.Error)
-		projectsResponse.Success = false
 		json.NewEncoder(responseWriter).Encode(projectsResponse)
 		return
 	}

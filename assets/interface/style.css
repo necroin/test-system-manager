@@ -12,6 +12,22 @@ body {
     flex-direction: row;
 }
 
+input {
+    background-color: rgb(45, 45, 45);
+    color: white;
+    border: 2px gray solid;
+}
+
+button {
+    background-color: rgb(45, 45, 45);
+    color: white;
+    border: 2px gray solid;
+}
+
+button:hover {
+    background-color: rgb(60, 60, 60);
+}
+
 .horizontal-layout {
     display: flex;
     flex-direction: row;
@@ -52,10 +68,6 @@ body {
 }
 
 .dialog input {
-    background-color: rgb(30, 30, 30);
-    ;
-    color: white;
-    border: 1px solid;
     min-height: 30px;
 }
 
@@ -73,10 +85,6 @@ body {
     margin-top: 10px;
 }
 
-.dialog-buttons button:hover {
-    background-color: rgb(45, 45, 45);
-}
-
 #menu_bar {
     position: fixed;
     display: flex;
@@ -91,14 +99,8 @@ body {
 .menu_bar_button {
     display: flex;
     padding: 10px;
-    background-color: rgb(45, 45, 45);
-    color: white;
     height: 48px;
     border: none;
-}
-
-.menu_bar_button:hover {
-    background-color: rgb(60, 60, 60);
 }
 
 .other-buttons {
@@ -148,9 +150,6 @@ body {
 
 #search-line input {
     flex-grow: 1;
-    background-color: rgb(45, 45, 45);
-    color: white;
-    border: 2px gray solid;
 }
 
 .list {
@@ -165,7 +164,7 @@ body {
         flex-direction: row;
         border: 2px gray solid;
         padding: 10px;
-        margin: 10px; 
+        margin: 10px;
     }
 
     .list-item span {
@@ -266,10 +265,29 @@ body {
     padding-right: 10px;
 }
 
-span.text+span.text-placeholder {
+.with-text-placeholder+span.text-placeholder {
     display: none;
 }
 
-span.text:empty+span.text-placeholder {
+.with-text-placeholder:empty+span.text-placeholder {
     display: flex;
+}
+
+#settings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.settings-item {
+    display: flex;
+    flex-direction: column;
+    border: 2px grey solid;
+    margin: 10px;
+    padding: 10px;
+    gap: 10px;
+}
+
+.settings-item-headline {
+    font-size: xx-large;
 }

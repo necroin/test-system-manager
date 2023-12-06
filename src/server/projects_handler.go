@@ -65,7 +65,6 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 
 	if projectsResponse.Error != nil {
 		logger.Error(projectsResponse.Error)
-		projectsResponse.Success = false
 		json.NewEncoder(responseWriter).Encode(projectsResponse)
 		return
 	}
@@ -91,7 +90,6 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 
 		if testCaseResponse.Error != nil {
 			logger.Error(testCaseResponse.Error)
-			projectsResponse.Success = false
 			json.NewEncoder(responseWriter).Encode(projectsResponse)
 			return
 		}
@@ -126,7 +124,6 @@ func (server *Server) ProjectsInsertHandler(responseWriter http.ResponseWriter, 
 
 	if projectsResponse.Error != nil {
 		logger.Error(projectsResponse.Error)
-		projectsResponse.Success = false
 		json.NewEncoder(responseWriter).Encode(projectsResponse)
 		return
 	}

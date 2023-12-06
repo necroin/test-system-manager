@@ -16,6 +16,47 @@
         ]
     },
     {
+        "name": "TSM_Users",
+        "fields": [
+            {
+                "name": "Id",
+                "type": "integer"
+            },
+            {
+                "name": "Name",
+                "type": "string"
+            },
+            {
+                "name": "Password",
+                "type": "string"
+            }
+        ],
+        "primary_key": [
+            "Id"
+        ]
+    },
+    {
+        "name": "TSM_ProjectUsers",
+        "fields": [
+            {
+                "name": "UserId",
+                "type": "integer"
+            },
+            {
+                "name": "ProjectId",
+                "type": "integer"
+            },
+            {
+                "name": "Role",
+                "type": "string"
+            }
+        ],
+        "primary_key": [
+            "UserId",
+            "ProjectId"
+        ]
+    },
+    {
         "name": "TSM_TestCase",
         "fields": [
             {
@@ -60,6 +101,11 @@
             {
                 "name": "Name",
                 "type": "string"
+            },
+            {
+                "name": "Description",
+                "type": "string",
+                "nullable": true
             }
         ],
         "primary_key": [
@@ -70,6 +116,10 @@
     {
         "name": "TSM_TestPlanTestCase",
         "fields": [
+            {
+                "name": "ProjectId",
+                "type": "integer"
+            },
             {
                 "name": "TestPlanId",
                 "type": "integer"
@@ -84,6 +134,7 @@
             }
         ],
         "primary_key": [
+            "ProjectId",
             "TestPlanId",
             "TestCaseId"
         ]
@@ -92,11 +143,39 @@
         "name": "TSM_Stat",
         "fields": [
             {
+                "name": "ProjectId",
+                "type": "integer"
+            },
+            {
+                "name": "TestPlanId",
+                "type": "integer"
+            },
+            {
+                "name": "TestCaseId",
+                "type": "integer"
+            },
+            {
                 "name": "TestRunId",
                 "type": "integer"
+            },
+            {
+                "name": "Result",
+                "type": "string"
+            },
+            {
+                "name": "Datetime",
+                "type": "string"
+            },
+            {
+                "name": "Comment",
+                "type": "string",
+                "nullable": true
             }
         ],
         "primary_key": [
+            "ProjectId",
+            "TestPlanId",
+            "TestCaseId",
             "TestRunId"
         ]
     },
@@ -105,7 +184,7 @@
         "fields": [
             {
                 "name": "ObjectId",
-                "type": "integer"
+                "type": "string"
             },
             {
                 "name": "ObjectType",
@@ -117,13 +196,49 @@
             },
             {
                 "name": "Color",
-                "type": "string"
+                "type": "string",
+                "nullable": true
             }
         ],
         "primary_key": [
             "ObjectId",
             "ObjectType",
             "Name"
+        ]
+    },
+    {
+        "name": "TSM_Comments",
+        "fields": [
+            {
+                "name": "Id",
+                "type": "integer"
+            },
+            {
+                "name": "ProjectId",
+                "type": "integer"
+            },
+            {
+                "name": "ObjectId",
+                "type": "string"
+            },
+            {
+                "name": "ObjectType",
+                "type": "string"
+            },
+            {
+                "name": "Username",
+                "type": "string"
+            },
+            {
+                "name": "Content",
+                "type": "string"
+            }
+        ],
+        "primary_key": [
+            "Id",
+            "ProjectId",
+            "ObjectId",
+            "ObjectType"
         ]
     }
 ]

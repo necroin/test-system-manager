@@ -102,7 +102,6 @@ func (server *Server) ProjectPlansSelectHandler(responseWriter http.ResponseWrit
 		})
 
 		if testCaseResponse.Error != nil {
-			projectTestCaseResponse.Success = false
 			json.NewEncoder(responseWriter).Encode(projectTestCaseResponse)
 			return
 		}
@@ -144,7 +143,6 @@ func (server *Server) ProjectPlansInsertHandler(responseWriter http.ResponseWrit
 
 	if projectsResponse.Error != nil {
 		logger.Error(projectsResponse.Error)
-		projectsResponse.Success = false
 		json.NewEncoder(responseWriter).Encode(projectsResponse)
 		return
 	}

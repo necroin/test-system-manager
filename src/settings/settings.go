@@ -7,11 +7,13 @@ const (
 )
 
 const (
-	InterfaceProjectsHTML     = "assets/interface/projects.html"
-	InterfaceProjectCasesHTML = "assets/interface/project_cases.html"
-	InterfaceProjectPlansHTML = "assets/interface/project_plans.html"
-	InterfaceCaseHTML         = "assets/interface/case.html"
-	InterfacePlanHTML         = "assets/interface/plan.html"
-	InterfaceStylePath        = "assets/interface/style.css"
-	InterfaceScriptPath       = "assets/interface/script.js"
+	InterfaceProjectsHTML          = "assets/interface/projects.html"
+	InterfaceProjectCasesHTML      = "assets/interface/project_cases.html"
+	InterfaceProjectPlansHTML      = "assets/interface/project_plans.html"
+	InterfaceProjectSettingsHTML   = "assets/interface/project_settings.html"
+	InterfaceProjectStatisticsHTML = "assets/interface/project_statistics.html"
+	InterfaceCaseHTML              = "assets/interface/case.html"
+	InterfacePlanHTML              = "assets/interface/plan.html"
+	InterfaceStylePath             = "assets/interface/style.css"
+	InterfaceScriptPath            = "assets/interface/script.js"
 )

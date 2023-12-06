@@ -138,6 +138,26 @@ function GetTestPlans(projectId) {
     }
 }
 
+function GetSettings(projectId) {
+    let response = post_request(window.request_url + "/project/" + projectId + "/settings/get")
+    let data = JSON.parse(response)
+    console.log(data)
+
+    let collaboratorsList = document.getElementById("collaborators");
+    // collaboratorsList.replaceChildren()
+
+
+    let tagsList = document.getElementById("tags");
+    tagsList.replaceChildren()
+    let tags = data.tags.records
+    for (tagIndex in tags) {
+        let tag = tags[tagIndex]
+        let tagElement = document.createElement("span")
+        tagElement.innerText = tag.fields.Name
+        tagsList.appendChild(tagElement)
+    }
+}
+
 function GetTestCase() {
     let response = post_request(window.location.href + "/get");
     let data = JSON.parse(response)
