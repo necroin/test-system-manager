@@ -20,3 +20,8 @@ type TestCaseDescriptor struct {
 	Description *string `json:"description,omitempty"`
 	Scenario    *string `json:"scenario,omitempty"`
 }
+
+type TestPlanDescriptor struct {
+	Description *string `json:"description,omitempty"`
+	TestCases   *string `json:"scenario,omitempty"`
+}

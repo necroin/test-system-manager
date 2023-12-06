@@ -210,7 +210,32 @@ function GetTestCase() {
 }
 
 function GetTestPlan() {
+    let testCasesList = document.getElementById("test-cases");
+    testCasesList.replaceChildren();
     let response = post_request(window.location.href + "/get");
+    let records = JSON.parse(response).records;
+    let projectId = window.location.pathname.split('/')[2];
+    for (recordIndex in records) {
+        var element = document.createElement("div");
+        element.className = "list-item"
+        var id = document.createElement("span");
+        var name = document.createElement("span");
+        var position = document.createElement("span");
+
+        id.innerHTML = records[recordIndex].fields.TestCaseId;
+        name.innerHTML = records[recordIndex].fields.TestCaseName;
+        position.innerHTML = records[recordIndex].fields.Position;
+
+        element.appendChild(id);
+        element.appendChild(name);
+        element.appendChild(position);
+
+        let testCaseId = id.innerHTML
+        element.onclick = () => OpenPage("/project/" + projectId + "/case/" + testCaseId);
+
+        testCasesList.appendChild(element);
+    }
+
 }
 
 function Edit(editButton, textElementId, textAreaElementId, fieldName) {
