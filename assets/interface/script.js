@@ -68,7 +68,7 @@ function AddProjectTag(projectId) {
     }
 }
 
-function GetProjectTags(projectId){
+function GetProjectTags(projectId) {
     let response = post_request(window.request_url + "/project/" + projectId + "/tags/get")
     let data = JSON.parse(response)
     return data.records
@@ -106,7 +106,7 @@ function GetProjects() {
         var tagsElement = document.createElement("div")
 
         let tags = GetProjectTags(projectId)
-        for(tagIndex in tags){
+        for (tagIndex in tags) {
             let tag = tags[tagIndex]
             let tagElement = document.createElement("span")
             tagElement.innerText = tag.fields.Name
@@ -175,9 +175,17 @@ function GetProjectSettings(projectId) {
     let tags = GetProjectTags(projectId)
     for (tagIndex in tags) {
         let tag = tags[tagIndex]
+        let div = document.createElement("div")
+
         let tagElement = document.createElement("span")
         tagElement.innerText = tag.fields.Name
-        tagsList.appendChild(tagElement)
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+
+        div.appendChild(tagElement)
+        div.appendChild(deleteButton)
+        tagsList.appendChild(div)
     }
 }
 

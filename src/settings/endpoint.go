@@ -33,4 +33,5 @@ const (
 
 	ServerProjectTagsSelectEndpoint = "/project/{id:[0-9]+}/tags/get"
 	ServerProjectTagsInsertEndpoint = "/project/{id:[0-9]+}/tags/insert"
+	ServerProjectTagsDeleteEndpoint = "/project/{id:[0-9]+}/tags/delete"
 )

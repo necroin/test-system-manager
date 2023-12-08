@@ -1,9 +1,7 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
-	"os"
 	"tsm/src/db/dbi"
 	"tsm/src/settings"
 
@@ -14,10 +12,6 @@ func (server *Server) ProjectPlanHandler(responseWriter http.ResponseWriter, req
 	params := mux.Vars(request)
 	projectId := params["id"]
 	testPlanId := params["planId"]
-
-	style, _ := os.ReadFile(settings.InterfaceStylePath)
-	script, _ := os.ReadFile(settings.InterfaceScriptPath)
-	html, _ := os.ReadFile(settings.InterfacePlanHTML)
 
 	response := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_TestPlan",
@@ -40,19 +34,17 @@ func (server *Server) ProjectPlanHandler(responseWriter http.ResponseWriter, req
 		},
 	})
 
-	content := fmt.Sprintf(
-		string(html),
-		fmt.Sprintf(`<style type="text/css">%s</style>`, style),
-		fmt.Sprintf(
-			fmt.Sprintf(`<script type="text/javascript">%s</script>`, script),
-			server.url,
-		),
-		projectId,
-		projectId,
-		projectId,
-		response.Records[0].Fields["Name"],
-	)
-	responseWriter.Write([]byte(content))
+	if response.Error != nil {
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	PageDescriptor := PageDescriptor{
+		ProjectId:    projectId,
+		TestPlanId:   testPlanId,
+		TestPlanName: response.Records[0].Fields["Name"],
+	}
+	server.PageHandler(responseWriter, settings.InterfacePlanHTML, PageDescriptor)
 }
 
 func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {

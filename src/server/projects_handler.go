@@ -12,7 +12,7 @@ import (
 )
 
 func (server *Server) ProjectsHandler(responseWriter http.ResponseWriter, request *http.Request) {
-	server.PageHandler(responseWriter, settings.InterfaceProjectsHTML)
+	server.PageHandler(responseWriter, settings.InterfaceProjectsHTML, PageDescriptor{})
 }
 
 func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {

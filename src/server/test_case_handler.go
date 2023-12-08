@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"tsm/src/db/dbi"
 	"tsm/src/logger"
 	"tsm/src/settings"
@@ -16,10 +15,6 @@ func (server *Server) ProjectCaseHandler(responseWriter http.ResponseWriter, req
 	params := mux.Vars(request)
 	projectId := params["id"]
 	testCaseId := params["caseId"]
-
-	style, _ := os.ReadFile(settings.InterfaceStylePath)
-	script, _ := os.ReadFile(settings.InterfaceScriptPath)
-	html, _ := os.ReadFile(settings.InterfaceCaseHTML)
 
 	response := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_TestCase",
@@ -42,19 +37,17 @@ func (server *Server) ProjectCaseHandler(responseWriter http.ResponseWriter, req
 		},
 	})
 
-	content := fmt.Sprintf(
-		string(html),
-		fmt.Sprintf(`<style type="text/css">%s</style>`, style),
-		fmt.Sprintf(
-			fmt.Sprintf(`<script type="text/javascript">%s</script>`, script),
-			server.url,
-		),
-		projectId,
-		projectId,
-		projectId,
-		response.Records[0].Fields["Name"],
-	)
-	responseWriter.Write([]byte(content))
+	if response.Error != nil {
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	PageDescriptor := PageDescriptor{
+		ProjectId:    projectId,
+		TestCaseId:   testCaseId,
+		TestCaseName: response.Records[0].Fields["Name"],
+	}
+	server.PageHandler(responseWriter, settings.InterfaceCaseHTML, PageDescriptor)
 }
 
 func (server *Server) ProjectCaseSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {

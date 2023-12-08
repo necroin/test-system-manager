@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"text/template"
 	"time"
 	"tsm/src/db/dbi"
 	"tsm/src/settings"
@@ -79,17 +80,17 @@ func (server *Server) WaitStart() error {
 	return fmt.Errorf("[Server] [WaitStart] [Error] failed get server status")
 }
 
-func (server *Server) PageHandler(responseWriter http.ResponseWriter, htmlPath string) {
+func (server *Server) PageHandler(responseWriter http.ResponseWriter, htmlPath string, pageDescriptor PageDescriptor) {
+	pageDescriptor.Url = server.url
+
 	style, _ := os.ReadFile(settings.InterfaceStylePath)
+	pageDescriptor.Style = fmt.Sprintf(`<style type="text/css">%s</style>`, style)
+
 	script, _ := os.ReadFile(settings.InterfaceScriptPath)
+	pageDescriptor.Script = fmt.Sprintf(fmt.Sprintf(`<script type="text/javascript">%s</script>`, script), server.url)
+
 	html, _ := os.ReadFile(htmlPath)
-	content := fmt.Sprintf(
-		string(html),
-		fmt.Sprintf(`<style type="text/css">%s</style>`, style),
-		fmt.Sprintf(
-			fmt.Sprintf(`<script type="text/javascript">%s</script>`, script),
-			server.url,
-		),
-	)
-	responseWriter.Write([]byte(content))
+	pageTemplate, _ := template.New("HtmpPage").Parse(string(html))
+
+	pageTemplate.Execute(responseWriter, pageDescriptor)
 }

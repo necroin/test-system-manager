@@ -1,5 +1,17 @@
 package server
 
+type PageDescriptor struct {
+	Url          string
+	Style        string
+	Script       string
+	ProjectId    string
+	ProjectName  string
+	TestCaseId   string
+	TestCaseName string
+	TestPlanId   string
+	TestPlanName string
+}
+
 type SearchRequest struct {
 	SearchFilter string `json:"search"`
 }
