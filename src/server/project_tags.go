@@ -80,3 +80,41 @@ func (server *Server) ProjectTagsInsertHandler(responseWriter http.ResponseWrite
 	}
 	json.NewEncoder(responseWriter).Encode(response)
 }
+
+func (server *Server) ProjectTagsDeleteHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	projectId := params["id"]
+
+	tagName, err := io.ReadAll(request.Body)
+	if err != nil {
+		logger.Error(err)
+		responseWriter.Write([]byte(err.Error()))
+		return
+	}
+
+	response := server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_Tags",
+		Filters: []dbi.Filter{
+			{
+				Name:     "Name",
+				Operator: "=",
+				Value:    fmt.Sprintf("'%s'", string(tagName)),
+			},
+			{
+				Name:     "ObjectId",
+				Operator: "=",
+				Value:    fmt.Sprintf("'%s'", projectId),
+			},
+			{
+				Name:     "ObjectType",
+				Operator: "=",
+				Value:    "'Project'",
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error)
+	}
+	json.NewEncoder(responseWriter).Encode(response)
+}

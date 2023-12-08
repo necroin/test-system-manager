@@ -6,6 +6,7 @@ import (
 	"io"
 	"strings"
 	"tsm/src/db/dbi"
+	"tsm/src/logger"
 )
 
 func (database *Database) DeleteRequest(request *dbi.Request) *dbi.Response {
@@ -25,6 +26,7 @@ func (database *Database) DeleteRequest(request *dbi.Request) *dbi.Response {
 		sqlFilters := " WHERE " + strings.Join(filters, " AND ")
 		sqlCommand = sqlCommand + sqlFilters
 	}
+	logger.Verbose(sqlCommand)
 
 	_, err := database.sql.Exec(sqlCommand)
 	if err != nil {

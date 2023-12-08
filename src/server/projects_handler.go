@@ -48,6 +48,43 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 			}
 			dbFilters = append(dbFilters, dbFilter)
 		}
+
+		if filterType == "tag" {
+			tagsRepsonse := server.db.SelectRequest(&dbi.Request{
+				Table: "TSM_Tags",
+				Fields: []dbi.Field{
+					{
+						Name: "ObjectId",
+					},
+				},
+				Filters: []dbi.Filter{
+					{
+						Name:     "Name",
+						Operator: "=",
+						Value:    fmt.Sprintf("'%s'", string(filterValue)),
+					},
+				},
+			})
+
+			if tagsRepsonse.Error != nil {
+				logger.Error(tagsRepsonse.Error)
+				json.NewEncoder(responseWriter).Encode(tagsRepsonse)
+				return
+			}
+
+			ids := []string{}
+			for _, record := range tagsRepsonse.Records {
+				ids = append(ids, record.Fields["ObjectId"])
+			}
+
+			dbFilter := dbi.Filter{
+				Name:     "Id",
+				Operator: "IN",
+				Value:    fmt.Sprintf("('%s')", strings.Join(ids, "','")),
+			}
+
+			dbFilters = append(dbFilters, dbFilter)
+		}
 	}
 
 	projectsResponse := server.db.SelectRequest(&dbi.Request{

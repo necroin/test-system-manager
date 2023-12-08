@@ -68,6 +68,11 @@ function AddProjectTag(projectId) {
     }
 }
 
+function DeleteProjectTag(projectId, tag) {
+    let response = post_request(window.request_url + "/project/" + projectId + "/tags/delete", tag)
+    GetProjectSettings(projectId)
+}
+
 function GetProjectTags(projectId) {
     let response = post_request(window.request_url + "/project/" + projectId + "/tags/get")
     let data = JSON.parse(response)
@@ -94,7 +99,6 @@ function GetProjects() {
         count.innerText = record.fields.TestCaseCount;
         count.style.minWidth = 100;
         count.style.maxWidth = 100;
-
 
         element.appendChild(id);
         element.appendChild(name);
@@ -182,6 +186,7 @@ function GetProjectSettings(projectId) {
 
         let deleteButton = document.createElement("button")
         deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { DeleteProjectTag(projectId, tagElement.innerText) }
 
         div.appendChild(tagElement)
         div.appendChild(deleteButton)
@@ -194,7 +199,7 @@ function GetTestCase() {
     let data = JSON.parse(response)
     let description = document.getElementById("description-text")
     let scenario = document.getElementById("scenario-text")
-    // description.innerHTML = "Нет описания"
+
     if (data.description != null) {
         description.innerText = data.description
     }
