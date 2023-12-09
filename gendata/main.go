@@ -62,7 +62,7 @@ func main() {
 					},
 					{
 						Name:  "Name",
-						Value: fmt.Sprintf("'Test Case Name %d'", testCaseId),
+						Value: fmt.Sprintf("'[Project %d] Test Case Name %d'", projectId, testCaseId),
 					},
 				},
 			})
@@ -89,7 +89,7 @@ func main() {
 					},
 					{
 						Name:  "Name",
-						Value: fmt.Sprintf("'Test Plan Name %d'", testPlanId),
+						Value: fmt.Sprintf("'[Project %d] Test Plan Name %d'", projectId, testPlanId),
 					},
 				},
 			})

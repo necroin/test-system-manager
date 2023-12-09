@@ -1,11 +1,13 @@
 package server
 
 import (
+	"encoding/json"
 	"net/http"
 	"tsm/src/db/dbi"
 	"tsm/src/settings"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/exp/slices"
 )
 
 func (server *Server) ProjectPlanHandler(responseWriter http.ResponseWriter, request *http.Request) {
@@ -48,4 +50,80 @@ func (server *Server) ProjectPlanHandler(responseWriter http.ResponseWriter, req
 }
 
 func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	projectId := params["id"]
+	testPlanId := params["planId"]
+
+	projectTestPlanResponse := server.db.SelectRequest(&dbi.Request{
+		Table: "TSM_TestPlanTestCase",
+		Fields: []dbi.Field{
+			{
+				Name: "TestCaseId",
+			},
+			{
+				Name: "Position",
+			},
+		},
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+			{
+				Name:     "TestPlanId",
+				Operator: "=",
+				Value:    testPlanId,
+			},
+		},
+	})
+
+	slices.SortFunc(projectTestPlanResponse.Records, func(record dbi.Record, other dbi.Record) int {
+		recordsPosition := record.Fields["Position"]
+		otherPosition := other.Fields["Position"]
+		if recordsPosition > otherPosition {
+			return 1
+		}
+		return -1
+	})
+
+	if projectTestPlanResponse.Error != nil {
+		json.NewEncoder(responseWriter).Encode(projectTestPlanResponse)
+		return
+	}
+
+	for _, record := range projectTestPlanResponse.Records {
+		testCaseId := record.Fields["TestCaseId"]
+
+		testCaseResponse := server.db.SelectRequest(&dbi.Request{
+			Table: "TSM_TestCase",
+			Fields: []dbi.Field{
+				{
+					Name: "Name",
+				},
+			},
+			Filters: []dbi.Filter{
+				{
+					Name:     "Id",
+					Operator: "=",
+					Value:    testCaseId,
+				},
+				{
+					Name:     "ProjectId",
+					Operator: "=",
+					Value:    projectId,
+				},
+			},
+		})
+
+		if testCaseResponse.Error != nil {
+			json.NewEncoder(responseWriter).Encode(testCaseResponse)
+			return
+		}
+
+		record.Fields["TestCaseName"] = testCaseResponse.Records[0].Fields["Name"]
+	}
+
+	json.NewEncoder(responseWriter).Encode(projectTestPlanResponse)
+
 }

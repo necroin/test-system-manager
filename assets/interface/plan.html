@@ -51,6 +51,57 @@
     </div>
     <div class="main-area">
         <div id="headline">{{.TestPlanName}}</div>
+        <div class="horizontal-layout">
+            <div style="flex-grow: 1;">
+                <div class="test-page-element">
+                    <div class="edit-header">
+                        <span class="edit-header-text">Описание</span>
+                        <button onclick="window.Edit(this, 'description-text', 'description-text-area', 'description')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                                <title>Edit</title>
+                                <path
+                                    d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+                            </svg>
+                            <span style="display: none;">Сохранить</span>
+                        </button>
+                    </div>
+                    <span id="description-text" class="text" style="word-break: break-all;"></span>
+                    <span id="description-text-placeholder" class="text-placeholder">
+                        Нет описания
+                    </span>
+                    <textarea class="edit-textarea" id="description-text-area" style="display: none;"></textarea>
+                </div>
+                <div class="test-page-element">
+                    <div class="headline">
+                        <span>Тест-кейсы</span>
+                    </div>
+                    <div id="test-cases" class="list"></div>
+                </div>
+                <div class="test-page-element comments">
+                    <div class="edit-header">
+                        <span>Комментарии</span>
+                    </div>
+                    <textarea id="comment-text-area" class="edit-textarea"></textarea>
+                    <button>Комментировать</button>
+                </div>
+            </div>
+            <div class="test-page-element tags">
+                <div class="edit-header">
+                    <span class="edit-header-text">Тэги</span>
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                            <title>Edit</title>
+                            <path
+                                d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="tags-list">
+                    <span>Plan tag 1</span>
+                    <span>Plan tag 2</span>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
