@@ -136,7 +136,8 @@
         "primary_key": [
             "ProjectId",
             "TestPlanId",
-            "TestCaseId"
+            "TestCaseId",
+            "Position"
         ]
     },
     {
