@@ -13,6 +13,13 @@ const (
 	ServerProjectsSelectEndpoint = "/projects/get"
 	ServerProjectsInsertEndpoint = "/projects/insert"
 
+	ServerProjectTagsSelectEndpoint       = "/project/{id:[0-9]+}/tags/get"
+	ServerProjectTagsInsertEndpoint       = "/project/{id:[0-9]+}/tags/insert"
+	ServerProjectTagsDeleteEndpoint       = "/project/{id:[0-9]+}/tags/delete"
+	ServerProjectStatisticsEndpoint       = "/project/{id:[0-9]+}/statistics"
+	ServerProjectStatisticsSelectEndpoint = "/project/{id:[0-9]+}/statistics/get"
+	ServerProjectSettingsEndpoint         = "/project/{id:[0-9]+}/settings"
+
 	ServerProjectCasesEndpoint       = "/project/{id:[0-9]+}/cases"
 	ServerProjectCasesSelectEndpoint = "/project/{id:[0-9]+}/cases/get"
 	ServerProjectCasesInsertEndpoint = "/project/{id:[0-9]+}/cases/insert"
@@ -25,13 +32,4 @@ const (
 	ServerProjectPlansInsertEndpoint = "/project/{id:[0-9]+}/plans/insert"
 	ServerProjectPlanEndpoint        = "/project/{id:[0-9]+}/plan/{planId:[0-9]+}"
 	ServerProjectPlanSelectEndpoint  = "/project/{id:[0-9]+}/plan/{planId:[0-9]+}/get"
-
-	ServerProjectStatisticsEndpoint       = "/project/{id:[0-9]+}/statistics"
-	ServerProjectStatisticsSelectEndpoint = "/project/{id:[0-9]+}/statistics/get"
-
-	ServerProjectSettingsEndpoint = "/project/{id:[0-9]+}/settings"
-
-	ServerProjectTagsSelectEndpoint = "/project/{id:[0-9]+}/tags/get"
-	ServerProjectTagsInsertEndpoint = "/project/{id:[0-9]+}/tags/insert"
-	ServerProjectTagsDeleteEndpoint = "/project/{id:[0-9]+}/tags/delete"
 )

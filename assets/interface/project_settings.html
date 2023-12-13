@@ -61,6 +61,13 @@
         <div id="headline">{{.ProjectName}}</div>
         <div id="settings" class="list">
             <div class="settings-item">
+                <span class="settings-item-headline">Имя проекта</span>
+                <div>
+                    <input type="text" id="settings-name-input" value="{{.ProjectName}}">
+                    <button>Переименовать</button>
+                </div>
+            </div>
+            <div class="settings-item">
                 <span class="settings-item-headline">Участники</span>
                 <div>
                     <input type="text" id="settings-collaborators-input">

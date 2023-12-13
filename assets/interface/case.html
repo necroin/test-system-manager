@@ -17,7 +17,8 @@
                 <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
             </svg>
         </button>
-        <button class="menu_bar_button" onclick="window.OpenPage('/project/{{.ProjectId}}/cases')" style="background-color: gray;">
+        <button class="menu_bar_button" onclick="window.OpenPage('/project/{{.ProjectId}}/cases')"
+            style="background-color: gray;">
             <!-- Test Cases -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
                 <title>Test Cases</title>
@@ -83,7 +84,7 @@
                             <span style="display: none;">Сохранить</span>
                         </button>
                     </div>
-                    <span id="scenario-text"style="word-break: break-all;"></span>
+                    <span id="scenario-text" style="word-break: break-all;"></span>
                     <textarea class="edit-textarea" id="scenario-text-area" style="display: none;"></textarea>
                 </div>
                 <div class="test-page-element comments">
@@ -95,20 +96,13 @@
                 </div>
             </div>
             <div class="test-page-element tags">
-                <div class="edit-header">
-                    <span class="edit-header-text">Тэги</span>
-                    <button>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
-                            <title>Edit</title>
-                            <path
-                                d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
-                        </svg>
-                    </button>
+                <span class="test-page-element-header">Тэги</span>
+                <div>
+                    <input type="text" id="tags-input">
+                    <button onclick="window.AddTestCaseTag('{{.ProjectId}}')">Добавить</button>
                 </div>
-                <div class="tags-list">
-                    <span>Test tag 1</span>
-                    <span>Test tag 2</span>
-                </div>
+                <div class="with-text-placeholder tags-list"></div>
+                <span class="text-placeholder settings-item-content">Нет тэгов</span>
             </div>
         </div>
     </div>

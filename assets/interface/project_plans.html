@@ -34,7 +34,8 @@
                 <path d="M3,4H7V8H3V4M9,5V7H21V5H9M3,10H7V14H3V10M9,11V13H21V11H9M3,16H7V20H3V16M9,17V19H21V17H9" />
             </svg>
         </button>
-        <button class="menu_bar_button" onclick="window.OpenPage('/project/{{.ProjectId}}/plans')" style="background-color: gray;">
+        <button class="menu_bar_button" onclick="window.OpenPage('/project/{{.ProjectId}}/plans')"
+            style="background-color: gray;">
             <!-- Test Plans -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
                 <title>Test Plans</title>
@@ -76,6 +77,10 @@
     </div>
     <div class="main-area">
         <div id="headline">{{.ProjectName}}</div>
+        <div id="search-line">
+            <button onclick="window.GetTestPlans('{{.ProjectId}}')"><span>Поиск</span></button>
+            <input id="search-line-text" type="text" onsubmit="window.GetTestPlans('{{.ProjectId}}')">
+        </div>
         <div id="test-plans" class="list"></div>
     </div>
 </body>

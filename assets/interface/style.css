@@ -214,6 +214,11 @@ button:hover {
     padding: 10px;
 }
 
+.test-page-element-header {
+    font-weight: bold;
+    font-size: large;
+}
+
 .edit-header {
     display: flex;
     margin-bottom: 10px;
@@ -266,6 +271,9 @@ button:hover {
 .tags {
     width: 300px;
     height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .tags-list {

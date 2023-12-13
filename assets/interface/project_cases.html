@@ -27,7 +27,8 @@
                 <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
             </svg>
         </button>
-        <button class="menu_bar_button" onclick="window.OpenPage('/project/{{.ProjectId}}/cases')" style="background-color: gray;">
+        <button class="menu_bar_button" onclick="window.OpenPage('/project/{{.ProjectId}}/cases')"
+            style="background-color: gray;">
             <!-- Test Cases -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
                 <title>Test Cases</title>
@@ -76,6 +77,10 @@
     </div>
     <div class="main-area">
         <div id="headline">{{.ProjectName}}</div>
+        <div id="search-line">
+            <button onclick="window.GetTestCases('{{.ProjectId}}')"><span>Поиск</span></button>
+            <input id="search-line-text" type="text" onsubmit="window.GetTestCases('{{.ProjectId}}')">
+        </div>
         <div id="test-cases" class="list"></div>
     </div>
 </body>
