@@ -158,6 +158,13 @@ button:hover {
     text-wrap: nowrap;
     overflow: auto;
 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
     .list-item {
         color: white;
         display: flex;
@@ -202,6 +209,14 @@ button:hover {
 
     .list-item:hover {
         background-color: rgb(90, 90, 90);
+    }
+
+    .list-item.dragging {
+        opacity: 0;
+    }
+
+    .list-item.dragging :where(.details, i) {
+        opacity: 0;
     }
 }
 

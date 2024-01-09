@@ -89,11 +89,11 @@ function GetProjects() {
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
         let record = records[recordIndex]
-        var element = document.createElement("div");
+        let element = document.createElement("div");
         element.className = "list-item"
-        var id = document.createElement("span");
-        var name = document.createElement("span");
-        var count = document.createElement("span");
+        let id = document.createElement("span");
+        let name = document.createElement("span");
+        let count = document.createElement("span");
         id.innerText = record.fields.Id;
         name.innerText = record.fields.Name;
         count.innerText = record.fields.TestCaseCount;
@@ -107,7 +107,7 @@ function GetProjects() {
         let projectId = id.innerText
         element.onclick = () => OpenPage("/project/" + projectId + "/cases");
 
-        var tagsElement = document.createElement("div")
+        let tagsElement = document.createElement("div")
 
         let tags = GetProjectTags(projectId)
         for (tagIndex in tags) {
@@ -216,11 +216,12 @@ function GetTestPlan() {
     let records = JSON.parse(response).records;
     let projectId = window.location.pathname.split('/')[2];
     for (recordIndex in records) {
-        var element = document.createElement("div");
+        let element = document.createElement("div");
         element.className = "list-item"
-        var id = document.createElement("span");
-        var name = document.createElement("span");
-        var position = document.createElement("span");
+        element.draggable = true
+        let id = document.createElement("span");
+        let name = document.createElement("span");
+        let position = document.createElement("span");
 
         id.innerHTML = records[recordIndex].fields.TestCaseId;
         name.innerHTML = records[recordIndex].fields.TestCaseName;
@@ -230,12 +231,29 @@ function GetTestPlan() {
         element.appendChild(name);
         element.appendChild(position);
 
-        let testCaseId = id.innerHTML
+        let testCaseId = id.innerHTML;
         element.onclick = () => OpenPage("/project/" + projectId + "/case/" + testCaseId);
+
+        element.addEventListener("dragstart", () => {
+            setTimeout(() => { element.classList.add("dragging") }, 0);
+        });
+
+        element.addEventListener("dragend", () => element.classList.remove("dragging"));
 
         testCasesList.appendChild(element);
     }
 
+    const initSortableList = (event) => {
+        event.preventDefault();
+        const draggingItem = document.querySelector(".dragging");
+        let siblings = [...testCasesList.querySelectorAll(".list-item:not(.dragging)")];
+        let nextSibling = siblings.find(sibling => {
+            return event.clientY + window.scrollY < sibling.offsetTop + sibling.offsetHeight / 2;
+        });
+        testCasesList.insertBefore(draggingItem, nextSibling);
+    }
+    testCasesList.addEventListener("dragover", initSortableList);
+    testCasesList.addEventListener("dragenter", event => event.preventDefault());
 }
 
 function Edit(editButton, textElementId, textAreaElementId, fieldName) {
