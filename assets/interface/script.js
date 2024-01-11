@@ -213,7 +213,14 @@ function GetTestPlan() {
     let testCasesList = document.getElementById("test-cases");
     testCasesList.replaceChildren();
     let response = post_request(window.location.href + "/get");
-    let records = JSON.parse(response).records;
+    let data = JSON.parse(response)
+    
+    let description = document.getElementById("description-text")
+    if (data.description != null) {
+        description.innerText = data.description
+    }
+
+    let records = data.cases;
     let projectId = window.location.pathname.split('/')[2];
     for (recordIndex in records) {
         let element = document.createElement("div");
@@ -222,8 +229,8 @@ function GetTestPlan() {
         let id = document.createElement("span");
         let name = document.createElement("span");
 
-        id.innerHTML = records[recordIndex].fields.TestCaseId;
-        name.innerHTML = records[recordIndex].fields.TestCaseName;
+        id.innerHTML = records[recordIndex].id;
+        name.innerHTML = records[recordIndex].name;
 
         element.appendChild(id);
         element.appendChild(name);
@@ -241,12 +248,9 @@ function GetTestPlan() {
             let data = { "cases": [] }
             for (i = 0; i < testCasesList.children.length; i++) {
                 let testCase = testCasesList.children.item(i)
-                console.log(testCase)
                 let id = testCase.children.item(0).innerText
-                console.log(id)
-                data["cases"].push(Number(id))
+                data["cases"].push({"id": id})
             }
-            console.log(data)
             let response = post_request(window.location.href + "/update", JSON.stringify(data));
         });
 

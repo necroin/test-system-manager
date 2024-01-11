@@ -57,6 +57,39 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 	testPlanId := params["planId"]
 
 	projectTestPlanResponse := server.db.SelectRequest(&dbi.Request{
+		Table: "TSM_TestPlan",
+		Fields: []dbi.Field{
+			{
+				Name: "Description",
+			},
+		},
+		Filters: []dbi.Filter{
+			{
+				Name:     "Id",
+				Operator: "=",
+				Value:    testPlanId,
+			},
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if projectTestPlanResponse.Error != nil {
+		logger.Error("%s", projectTestPlanResponse.Error)
+		responseWriter.Write([]byte(projectTestPlanResponse.Error.Error()))
+		return
+	}
+
+	description := projectTestPlanResponse.Records[0].Fields["Description"]
+	data := TestPlanDescriptor{
+		Description: &description,
+		TestCases:   []TestPlanDescriptorCases{},
+	}
+
+	testPlanTestCaseResponse := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_TestPlanTestCase",
 		Fields: []dbi.Field{
 			{
@@ -80,7 +113,7 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 		},
 	})
 
-	slices.SortFunc(projectTestPlanResponse.Records, func(record dbi.Record, other dbi.Record) int {
+	slices.SortFunc(testPlanTestCaseResponse.Records, func(record dbi.Record, other dbi.Record) int {
 		recordsPosition := record.Fields["Position"]
 		otherPosition := other.Fields["Position"]
 		if recordsPosition > otherPosition {
@@ -89,12 +122,13 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 		return -1
 	})
 
-	if projectTestPlanResponse.Error != nil {
-		json.NewEncoder(responseWriter).Encode(projectTestPlanResponse)
+	if testPlanTestCaseResponse.Error != nil {
+		logger.Error("%s", testPlanTestCaseResponse.Error)
+		json.NewEncoder(responseWriter).Encode(testPlanTestCaseResponse)
 		return
 	}
 
-	for _, record := range projectTestPlanResponse.Records {
+	for _, record := range testPlanTestCaseResponse.Records {
 		testCaseId := record.Fields["TestCaseId"]
 
 		testCaseResponse := server.db.SelectRequest(&dbi.Request{
@@ -119,14 +153,18 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 		})
 
 		if testCaseResponse.Error != nil {
+			logger.Error("%s", testCaseResponse.Error)
 			json.NewEncoder(responseWriter).Encode(testCaseResponse)
 			return
 		}
 
-		record.Fields["TestCaseName"] = testCaseResponse.Records[0].Fields["Name"]
+		data.TestCases = append(data.TestCases, TestPlanDescriptorCases{
+			Id:   testCaseId,
+			Name: testCaseResponse.Records[0].Fields["Name"],
+		})
 	}
 
-	json.NewEncoder(responseWriter).Encode(projectTestPlanResponse)
+	json.NewEncoder(responseWriter).Encode(data)
 
 }
 
@@ -137,10 +175,39 @@ func (server *Server) ProjectPlanUpdateHandler(responseWriter http.ResponseWrite
 
 	data := &TestPlanDescriptor{}
 	json.NewDecoder(request.Body).Decode(data)
+
+	if data.Description != nil {
+		response := server.db.UpdateRequest(&dbi.Request{
+			Table: "TSM_TestPlan",
+			Fields: []dbi.Field{{
+				Name:  "Description",
+				Value: fmt.Sprintf("'%s'", *data.Description),
+			}},
+			Filters: []dbi.Filter{
+				{
+					Name:     "Id",
+					Operator: "=",
+					Value:    testPlanId,
+				},
+				{
+					Name:     "ProjectId",
+					Operator: "=",
+					Value:    projectId,
+				},
+			},
+		})
+
+		if response.Error != nil {
+			logger.Error("%s", response.Error)
+			responseWriter.Write([]byte(response.Error.Error()))
+			return
+		}
+	}
+
 	logger.Verbose("Update ids: %v", data.TestCases)
 
-	for position, id := range data.TestCases {
-		server.db.UpdateRequest(&dbi.Request{
+	for position, descriptor := range data.TestCases {
+		response := server.db.UpdateRequest(&dbi.Request{
 			Table: "TSM_TestPlanTestCase",
 			Fields: []dbi.Field{{
 				Name:  "Position",
@@ -160,9 +227,15 @@ func (server *Server) ProjectPlanUpdateHandler(responseWriter http.ResponseWrite
 				{
 					Name:     "TestCaseId",
 					Operator: "=",
-					Value:    fmt.Sprintf("%d", id),
+					Value:    fmt.Sprintf("%s", descriptor.Id),
 				},
 			},
 		})
+
+		if response.Error != nil {
+			logger.Error("%s", response.Error)
+			responseWriter.Write([]byte(response.Error.Error()))
+			return
+		}
 	}
 }

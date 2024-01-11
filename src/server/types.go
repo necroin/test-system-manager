@@ -21,7 +21,12 @@ type TestCaseDescriptor struct {
 	Scenario    *string `json:"scenario,omitempty"`
 }
 
+type TestPlanDescriptorCases struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
 type TestPlanDescriptor struct {
-	Description *string `json:"description,omitempty"`
-	TestCases   []int   `json:"cases,omitempty"`
+	Description *string                   `json:"description,omitempty"`
+	TestCases   []TestPlanDescriptorCases `json:"cases,omitempty"`
 }
