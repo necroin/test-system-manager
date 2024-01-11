@@ -64,6 +64,7 @@ func main() {
 
 	server.AddHandler(settings.ServerProjectPlanEndpoint, server.ProjectPlanHandler, "GET")
 	server.AddHandler(settings.ServerProjectPlanSelectEndpoint, server.ProjectPlanSelectHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectPlanUpdateEndpoint, server.ProjectPlanUpdateHandler, "POST", "GET")
 
 	go func() {
 		wg.Add(1)

@@ -80,7 +80,7 @@ func (server *Server) ProjectCaseSelectHandler(responseWriter http.ResponseWrite
 	})
 
 	if response.Error != nil {
-		logger.Error(response.Error)
+		logger.Error("%s", response.Error)
 	}
 
 	if len(response.Records) == 0 {
@@ -139,7 +139,7 @@ func (server *Server) ProjectCaseUpdateHandler(responseWriter http.ResponseWrite
 		})
 
 		if response.Error != nil {
-			logger.Error(response.Error)
+			logger.Error("%s", response.Error)
 		}
 	}
 }

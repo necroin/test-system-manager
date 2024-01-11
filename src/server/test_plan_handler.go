@@ -2,8 +2,10 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"tsm/src/db/dbi"
+	"tsm/src/logger"
 	"tsm/src/settings"
 
 	"github.com/gorilla/mux"
@@ -126,4 +128,41 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 
 	json.NewEncoder(responseWriter).Encode(projectTestPlanResponse)
 
+}
+
+func (server *Server) ProjectPlanUpdateHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	projectId := params["id"]
+	testPlanId := params["planId"]
+
+	data := &TestPlanDescriptor{}
+	json.NewDecoder(request.Body).Decode(data)
+	logger.Verbose("Update ids: %v", data.TestCases)
+
+	for position, id := range data.TestCases {
+		server.db.UpdateRequest(&dbi.Request{
+			Table: "TSM_TestPlanTestCase",
+			Fields: []dbi.Field{{
+				Name:  "Position",
+				Value: fmt.Sprintf("%d", position+1),
+			}},
+			Filters: []dbi.Filter{
+				{
+					Name:     "ProjectId",
+					Operator: "=",
+					Value:    projectId,
+				},
+				{
+					Name:     "TestPlanId",
+					Operator: "=",
+					Value:    testPlanId,
+				},
+				{
+					Name:     "TestCaseId",
+					Operator: "=",
+					Value:    fmt.Sprintf("%d", id),
+				},
+			},
+		})
+	}
 }

@@ -23,5 +23,5 @@ type TestCaseDescriptor struct {
 
 type TestPlanDescriptor struct {
 	Description *string `json:"description,omitempty"`
-	TestCases   *string `json:"scenario,omitempty"`
+	TestCases   []int   `json:"cases,omitempty"`
 }

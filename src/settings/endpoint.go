@@ -32,4 +32,5 @@ const (
 	ServerProjectPlansInsertEndpoint = "/project/{id:[0-9]+}/plans/insert"
 	ServerProjectPlanEndpoint        = "/project/{id:[0-9]+}/plan/{planId:[0-9]+}"
 	ServerProjectPlanSelectEndpoint  = "/project/{id:[0-9]+}/plan/{planId:[0-9]+}/get"
+	ServerProjectPlanUpdateEndpoint  = "/project/{id:[0-9]+}/plan/{planId:[0-9]+}/update"
 )

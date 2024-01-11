@@ -37,7 +37,7 @@ func (server *Server) ProjectTagsSelectHandler(responseWriter http.ResponseWrite
 	})
 
 	if projectTagsResponse.Error != nil {
-		logger.Error(projectTagsResponse.Error)
+		logger.Error("%s", projectTagsResponse.Error)
 		json.NewEncoder(responseWriter).Encode(projectTagsResponse)
 		return
 	}
@@ -51,7 +51,7 @@ func (server *Server) ProjectTagsInsertHandler(responseWriter http.ResponseWrite
 
 	tagName, err := io.ReadAll(request.Body)
 	if err != nil {
-		logger.Error(err)
+		logger.Error("%s", err)
 		responseWriter.Write([]byte(err.Error()))
 		return
 	}
@@ -76,7 +76,7 @@ func (server *Server) ProjectTagsInsertHandler(responseWriter http.ResponseWrite
 	})
 
 	if response.Error != nil {
-		logger.Error(response.Error)
+		logger.Error("%s", response.Error)
 	}
 	json.NewEncoder(responseWriter).Encode(response)
 }
@@ -87,7 +87,7 @@ func (server *Server) ProjectTagsDeleteHandler(responseWriter http.ResponseWrite
 
 	tagName, err := io.ReadAll(request.Body)
 	if err != nil {
-		logger.Error(err)
+		logger.Error("%s", err)
 		responseWriter.Write([]byte(err.Error()))
 		return
 	}
@@ -114,7 +114,7 @@ func (server *Server) ProjectTagsDeleteHandler(responseWriter http.ResponseWrite
 	})
 
 	if response.Error != nil {
-		logger.Error(response.Error)
+		logger.Error("%s", response.Error)
 	}
 	json.NewEncoder(responseWriter).Encode(response)
 }

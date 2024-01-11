@@ -67,7 +67,7 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 			})
 
 			if tagsRepsonse.Error != nil {
-				logger.Error(tagsRepsonse.Error)
+				logger.Error("%s", tagsRepsonse.Error)
 				json.NewEncoder(responseWriter).Encode(tagsRepsonse)
 				return
 			}
@@ -101,7 +101,7 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 	})
 
 	if projectsResponse.Error != nil {
-		logger.Error(projectsResponse.Error)
+		logger.Error("%s", projectsResponse.Error)
 		json.NewEncoder(responseWriter).Encode(projectsResponse)
 		return
 	}
@@ -126,7 +126,7 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 		})
 
 		if testCaseResponse.Error != nil {
-			logger.Error(testCaseResponse.Error)
+			logger.Error("%s", testCaseResponse.Error)
 			json.NewEncoder(responseWriter).Encode(projectsResponse)
 			return
 		}
@@ -140,7 +140,7 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 func (server *Server) ProjectsInsertHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	projectName, err := io.ReadAll(request.Body)
 	if err != nil {
-		logger.Error(err)
+		logger.Error("%s", err)
 		responseWriter.Write([]byte(err.Error()))
 		return
 	}
@@ -160,7 +160,7 @@ func (server *Server) ProjectsInsertHandler(responseWriter http.ResponseWriter, 
 	})
 
 	if projectsResponse.Error != nil {
-		logger.Error(projectsResponse.Error)
+		logger.Error("%s", projectsResponse.Error)
 		json.NewEncoder(responseWriter).Encode(projectsResponse)
 		return
 	}

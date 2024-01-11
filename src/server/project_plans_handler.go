@@ -113,7 +113,7 @@ func (server *Server) ProjectPlansInsertHandler(responseWriter http.ResponseWrit
 
 	name, err := io.ReadAll(request.Body)
 	if err != nil {
-		logger.Error(err)
+		logger.Error("%s", err)
 		responseWriter.Write([]byte(err.Error()))
 		return
 	}
@@ -137,7 +137,7 @@ func (server *Server) ProjectPlansInsertHandler(responseWriter http.ResponseWrit
 	})
 
 	if projectsResponse.Error != nil {
-		logger.Error(projectsResponse.Error)
+		logger.Error("%s", projectsResponse.Error)
 		json.NewEncoder(responseWriter).Encode(projectsResponse)
 		return
 	}

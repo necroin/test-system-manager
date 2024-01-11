@@ -221,15 +221,12 @@ function GetTestPlan() {
         element.draggable = true
         let id = document.createElement("span");
         let name = document.createElement("span");
-        let position = document.createElement("span");
 
         id.innerHTML = records[recordIndex].fields.TestCaseId;
         name.innerHTML = records[recordIndex].fields.TestCaseName;
-        position.innerHTML = records[recordIndex].fields.Position;
 
         element.appendChild(id);
         element.appendChild(name);
-        element.appendChild(position);
 
         let testCaseId = id.innerHTML;
         element.onclick = () => OpenPage("/project/" + projectId + "/case/" + testCaseId);
@@ -238,7 +235,20 @@ function GetTestPlan() {
             setTimeout(() => { element.classList.add("dragging") }, 0);
         });
 
-        element.addEventListener("dragend", () => element.classList.remove("dragging"));
+        element.addEventListener("dragend", () => {
+            element.classList.remove("dragging")
+
+            let data = { "cases": [] }
+            for (i = 0; i < testCasesList.children.length; i++) {
+                let testCase = testCasesList.children.item(i)
+                console.log(testCase)
+                let id = testCase.children.item(0).innerText
+                console.log(id)
+                data["cases"].push(Number(id))
+            }
+            console.log(data)
+            let response = post_request(window.location.href + "/update", JSON.stringify(data));
+        });
 
         testCasesList.appendChild(element);
     }

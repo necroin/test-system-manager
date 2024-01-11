@@ -10,10 +10,10 @@ import (
 )
 
 const (
-	errorLevel   = 0
-	infoLevel    = 1
-	debugLevel   = 2
-	verboseLevel = 3
+	errorLevel = iota
+	infoLevel
+	verboseLevel
+	debugLevel
 )
 
 var (
@@ -55,42 +55,32 @@ func Configure(config *config.Config) error {
 	return nil
 }
 
-func Info(message any) {
-	if logLevel >= infoLevel {
-		go func() {
-			mutex.Lock()
-			defer mutex.Unlock()
-			log.Printf("INFO: %s\n", message)
-		}()
-	}
+func print(message string) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	log.Println(message)
 }
 
-func Error(message any) {
+func Error(message string, args ...any) {
 	if logLevel >= errorLevel {
-		go func() {
-			mutex.Lock()
-			defer mutex.Unlock()
-			log.Printf("ERROR: %s\n", message)
-		}()
+		print("ERROR: " + fmt.Sprintf(message, args...))
 	}
 }
 
-func Debug(message any) {
-	if logLevel >= debugLevel {
-		go func() {
-			mutex.Lock()
-			defer mutex.Unlock()
-			log.Printf("DEBUG: %s\n", message)
-		}()
+func Info(message string, args ...any) {
+	if logLevel >= infoLevel {
+		print("INFO: " + fmt.Sprintf(message, args...))
 	}
 }
 
-func Verbose(message any) {
+func Verbose(message string, args ...any) {
 	if logLevel >= verboseLevel {
-		go func() {
-			mutex.Lock()
-			defer mutex.Unlock()
-			log.Printf("VERBOSE: %s\n", message)
-		}()
+		print("VERBOSE: " + fmt.Sprintf(message, args...))
+	}
+}
+
+func Debug(message string, args ...any) {
+	if logLevel >= debugLevel {
+		print("DEBUG: " + fmt.Sprintf(message, args...))
 	}
 }

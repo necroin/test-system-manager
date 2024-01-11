@@ -35,7 +35,7 @@ func (database *Database) SelectRequest(request *dbi.Request) *dbi.Response {
 		sqlCommand = sqlCommand + sqlFilters
 	}
 
-	logger.Verbose(sqlCommand)
+	logger.Debug(sqlCommand)
 	result, err := database.sql.Query(sqlCommand)
 	if err != nil {
 		response.Success = false

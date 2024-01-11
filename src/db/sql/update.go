@@ -33,7 +33,7 @@ func (database *Database) UpdateRequest(request *dbi.Request) *dbi.Response {
 		sqlCommand = sqlCommand + sqlFilters
 	}
 
-	logger.Verbose(sqlCommand)
+	logger.Debug(sqlCommand)
 	_, err := database.sql.Exec(sqlCommand)
 	if err != nil {
 		response.Success = false
@@ -46,13 +46,13 @@ func (database *Database) UpdateRequest(request *dbi.Request) *dbi.Response {
 func (database *Database) UpdateHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	dbRequest := &dbi.Request{}
 	if err := json.NewDecoder(request.Body).Decode(dbRequest); err != nil {
-		logger.Error(fmt.Errorf("[Database] [UpdateHandler] [Error] failed decode json request: %s", err))
+		logger.Error("[Database] [UpdateHandler] [Error] failed decode json request: %s", err)
 		return
 	}
 
 	response := database.UpdateRequest(dbRequest)
 	if err := json.NewEncoder(responseWriter).Encode(response); err != nil {
-		logger.Error(fmt.Errorf("[Database] [UpdateHandler] [Error] failed encode json response: %s", err))
+		logger.Error("[Database] [UpdateHandler] [Error] failed encode json response: %s", err)
 		return
 	}
 

@@ -11,7 +11,7 @@ import (
 
 func (database *Database) Insert(table string, columns []string, values []string) error {
 	sqlCommand := fmt.Sprintf("INSERT OR REPLACE INTO %s (%s) VALUES (%s)", table, strings.Join(columns, ", "), strings.Join(values, ", "))
-	logger.Verbose(sqlCommand)
+	logger.Debug(sqlCommand)
 	_, err := database.sql.Exec(sqlCommand)
 	if err != nil {
 		return fmt.Errorf("[Database] [Insert] [Error] failed database request: %s", err)
@@ -48,13 +48,13 @@ func (database *Database) InsertRequest(request *dbi.Request) *dbi.Response {
 func (database *Database) InsertHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	dbRequest := &dbi.Request{}
 	if err := json.NewDecoder(request.Body).Decode(request); err != nil {
-		logger.Error(fmt.Errorf("[Database] [InsertHandler] [Error] failed decode json request: %s", err))
+		logger.Error("[Database] [InsertHandler] [Error] failed decode json request: %s", err)
 		return
 	}
 
 	response := database.InsertRequest(dbRequest)
 	if err := json.NewEncoder(responseWriter).Encode(response); err != nil {
-		logger.Error(fmt.Errorf("[Database] [InsertHandler] [Error] failed encode json response: %s", err))
+		logger.Error("[Database] [InsertHandler] [Error] failed encode json response: %s", err)
 		return
 	}
 
