@@ -63,6 +63,11 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 						Operator: "=",
 						Value:    fmt.Sprintf("'%s'", string(filterValue)),
 					},
+					{
+						Name:     "ObjectType",
+						Operator: "=",
+						Value:    fmt.Sprintf("'%s'", settings.ObjectTypeProject),
+					},
 				},
 			})
 
@@ -120,7 +125,7 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 				{
 					Name:     "ProjectId",
 					Operator: "=",
-					Value:    projectId,
+					Value:    fmt.Sprintf("'%s'", projectId),
 				},
 			},
 		})

@@ -17,3 +17,9 @@ const (
 	InterfaceStylePath             = "assets/interface/style.css"
 	InterfaceScriptPath            = "assets/interface/script.js"
 )
+
+const (
+	ObjectTypeProject  = "Project"
+	ObjectTypeTestCase = "TestCase"
+	ObjectTypeTestPlan = "TestPlan"
+)

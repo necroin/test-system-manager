@@ -34,4 +34,8 @@ const (
 	ServerProjectPlanSelectEndpoint     = "/project/{id:[0-9]+}/plan/{planId:[0-9]+}/get"
 	ServerProjectPlanUpdateEndpoint     = "/project/{id:[0-9]+}/plan/{planId:[0-9]+}/update"
 	ServerProjectPlanCaseAppendEndpoint = "/project/{id:[0-9]+}/plan/{planId:[0-9]+}/case/append"
+
+	ServerCaseTagsSelectEndpoint = "/project/{id:[0-9]+}/case/{caseId:[0-9]+}/tags/get"
+	ServerCaseTagsInsertEndpoint = "/project/{id:[0-9]+}/case/{caseId:[0-9]+}/tags/insert"
+	ServerCaseTagsDeleteEndpoint = "/project/{id:[0-9]+}/case/{caseId:[0-9]+}/tags/delete"
 )

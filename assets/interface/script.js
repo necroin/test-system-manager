@@ -122,10 +122,30 @@ function GetProjects() {
     }
 }
 
+function AddTestCaseTag() {
+    let tag = document.getElementById("settings-tags-input").value
+    if (tag != "") {
+        let response = post_request(window.location + "/tags/insert", tag)
+        UpdateTestCaseTags()
+    }
+}
+
+function DeleteTestCaseTag(tag) {
+    let response = post_request(window.location + "/tags/delete", tag)
+    UpdateTestCaseTags()
+}
+
+function GetTestCaseTags() {
+    let response = post_request(window.location + "/tags/get")
+    let data = JSON.parse(response)
+    return data.records
+}
+
 function GetTestCases(projectId) {
     let testCasesList = document.getElementById("test-cases");
     testCasesList.replaceChildren();
-    let response = post_request(window.request_url + "/project/" + projectId + "/cases/get");
+    let response = post_request(window.request_url + "/project/" + projectId + "/cases/get",
+        JSON.stringify({ "search": GetSearchLineText() }));
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
         let record = records[recordIndex]
@@ -141,6 +161,20 @@ function GetTestCases(projectId) {
 
         let testCaseId = id.innerHTML
         element.onclick = () => OpenPage("/project/" + projectId + "/case/" + testCaseId);
+
+        var tagsElement = document.createElement("div")
+
+        let tag_response = post_request(window.request_url + "/project/" + projectId + "/case/" + testCaseId + "/tags/get")
+        console.log(tag_response)
+        let tags = JSON.parse(tag_response).records
+
+        for (tagIndex in tags) {
+            let tag = tags[tagIndex]
+            let tagElement = document.createElement("span")
+            tagElement.innerText = tag.fields.Name
+            tagsElement.appendChild(tagElement)
+        }
+        element.appendChild(tagsElement);
 
         testCasesList.appendChild(element);
     }
@@ -193,9 +227,31 @@ function GetProjectSettings(projectId) {
         tagsList.appendChild(div)
     }
 }
+function UpdateTestCaseTags() {
+    let tagsList = document.getElementById("tags");
+    tagsList.replaceChildren()
+    let tags = GetTestCaseTags()
+
+    for (tagIndex in tags) {
+        let tag = tags[tagIndex]
+        let div = document.createElement("div")
+
+        let tagElement = document.createElement("span")
+        tagElement.innerText = tag.fields.Name
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { DeleteTestCaseTag(tagElement.innerText) }
+
+        div.appendChild(tagElement)
+        div.appendChild(deleteButton)
+        tagsList.appendChild(div)
+    }
+}
 
 function GetTestCase() {
     let response = post_request(window.location.href + "/get");
+
     let data = JSON.parse(response)
     let description = document.getElementById("description-text")
     let scenario = document.getElementById("scenario-text")
@@ -207,6 +263,9 @@ function GetTestCase() {
     if (data.scenario != null) {
         scenario.innerText = data.scenario
     }
+
+    UpdateTestCaseTags()
+
 }
 
 function GetTestPlan(projectId) {

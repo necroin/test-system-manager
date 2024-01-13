@@ -128,7 +128,7 @@ func main() {
 		}
 	}
 
-	fmt.Println("Generating TSM_Tags.")
+	fmt.Println("Generating TSM_Tags for projects.")
 	for projectId := 1; projectId <= 20; projectId++ {
 		for tagId := 1; tagId <= projectId; tagId++ {
 			response := db.InsertRequest(&dbi.Request{
@@ -154,5 +154,35 @@ func main() {
 			}
 		}
 	}
+
+	fmt.Println("Generating TSM_Tags for test cases.")
+	for projectId := 1; projectId <= 20; projectId++ {
+		for testCaseId := 1; testCaseId <= projectId; testCaseId++ {
+			for tagId := 1; tagId <= testCaseId; tagId++ {
+				response := db.InsertRequest(&dbi.Request{
+					Table: "TSM_Tags",
+					Fields: []dbi.Field{
+						{
+							Name:  "ObjectId",
+							Value: fmt.Sprintf("'%d;%d'", projectId, testCaseId),
+						},
+						{
+							Name:  "ObjectType",
+							Value: "'TestCase'",
+						},
+						{
+							Name:  "Name",
+							Value: fmt.Sprintf("'Generated Tag %d'", tagId),
+						},
+					},
+				})
+
+				if response.Error != nil {
+					panic(response.Error)
+				}
+			}
+		}
+	}
+
 	fmt.Println("Finished.")
 }
