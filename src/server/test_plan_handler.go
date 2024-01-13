@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"tsm/src/db/dbi"
 	"tsm/src/logger"
@@ -113,6 +114,7 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 		},
 	})
 
+	logger.Debug("%#v", testPlanTestCaseResponse)
 	slices.SortFunc(testPlanTestCaseResponse.Records, func(record dbi.Record, other dbi.Record) int {
 		recordsPosition := record.Fields["Position"]
 		otherPosition := other.Fields["Position"]
@@ -206,13 +208,9 @@ func (server *Server) ProjectPlanUpdateHandler(responseWriter http.ResponseWrite
 
 	logger.Verbose("Update ids: %v", data.TestCases)
 
-	for position, descriptor := range data.TestCases {
-		response := server.db.UpdateRequest(&dbi.Request{
+	if len(data.TestCases) > 0 {
+		response := server.db.DeleteRequest(&dbi.Request{
 			Table: "TSM_TestPlanTestCase",
-			Fields: []dbi.Field{{
-				Name:  "Position",
-				Value: fmt.Sprintf("%d", position+1),
-			}},
 			Filters: []dbi.Filter{
 				{
 					Name:     "ProjectId",
@@ -224,10 +222,35 @@ func (server *Server) ProjectPlanUpdateHandler(responseWriter http.ResponseWrite
 					Operator: "=",
 					Value:    testPlanId,
 				},
+			},
+		})
+
+		if response.Error != nil {
+			logger.Error("%s", response.Error)
+			responseWriter.Write([]byte(response.Error.Error()))
+			return
+		}
+	}
+
+	for position, descriptor := range data.TestCases {
+		response := server.db.InsertRequest(&dbi.Request{
+			Table: "TSM_TestPlanTestCase",
+			Fields: []dbi.Field{
 				{
-					Name:     "TestCaseId",
-					Operator: "=",
-					Value:    fmt.Sprintf("%s", descriptor.Id),
+					Name:  "ProjectId",
+					Value: projectId,
+				},
+				{
+					Name:  "TestPlanId",
+					Value: testPlanId,
+				},
+				{
+					Name:  "TestCaseId",
+					Value: descriptor.Id,
+				},
+				{
+					Name:  "Position",
+					Value: fmt.Sprintf("%d", position+1),
 				},
 			},
 		})
@@ -237,5 +260,72 @@ func (server *Server) ProjectPlanUpdateHandler(responseWriter http.ResponseWrite
 			responseWriter.Write([]byte(response.Error.Error()))
 			return
 		}
+	}
+}
+
+func (server *Server) ProjectPlanCaseAppendHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	projectId := params["id"]
+	testPlanId := params["planId"]
+
+	data, _ := io.ReadAll(request.Body)
+	caseId := string(data)
+
+	response := server.db.SelectRequest(&dbi.Request{
+		Table: "TSM_TestPlanTestCase",
+		Fields: []dbi.Field{
+			{
+				Name: "COALESCE((MAX(Position) + 1), 1) as Position",
+			},
+		},
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+			{
+				Name:     "TestPlanId",
+				Operator: "=",
+				Value:    testPlanId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error("%s", response.Error)
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	position := response.Records[0].Fields["Position"]
+	logger.Verbose("[ServerProjectPlanCaseAppendHandler] append record with position %v", position)
+
+	response = server.db.InsertRequest(&dbi.Request{
+		Table: "TSM_TestPlanTestCase",
+		Fields: []dbi.Field{
+			{
+				Name:  "ProjectId",
+				Value: projectId,
+			},
+			{
+				Name:  "TestPlanId",
+				Value: testPlanId,
+			},
+			{
+				Name:  "TestCaseId",
+				Value: caseId,
+			},
+			{
+				Name:  "Position",
+				Value: position,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error("%s", response.Error)
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
 	}
 }

@@ -15,7 +15,7 @@
             <select id="append-case-select"></select>
             <div class="dialog-buttons">
                 <button onclick="window.close_dialog('append-dialog', 'append-dialog-overlay')">Отменить</button>
-                <button onclick="window.AppendTestCase('{{.ProjectId}}')">Добавить</button>
+                <button onclick="window.AppendTestCase('{{.ProjectId}}'); window.GetTestPlan('{{.ProjectId}}')">Добавить</button>
             </div>
         </div>
     </div>

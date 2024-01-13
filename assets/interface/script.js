@@ -217,7 +217,7 @@ function GetTestPlan(projectId) {
 
     let response = post_request(window.location.href + "/get");
     let data = JSON.parse(response)
-    
+
     let description = document.getElementById("description-text")
     if (data.description != null) {
         description.innerText = data.description
@@ -251,7 +251,7 @@ function GetTestPlan(projectId) {
             for (i = 0; i < testCasesList.children.length; i++) {
                 let testCase = testCasesList.children.item(i)
                 let id = testCase.children.item(0).innerText
-                data["cases"].push({"id": id})
+                data["cases"].push({ "id": id })
             }
             let response = post_request(window.location.href + "/update", JSON.stringify(data));
         });
@@ -260,6 +260,8 @@ function GetTestPlan(projectId) {
 
         let appendCaseOption = document.createElement("option")
         appendCaseOption.innerText = name.innerText
+        appendCaseOption.__custom__ = {}
+        appendCaseOption.__custom__.id = testCaseId
         appendCaseSelect.appendChild(appendCaseOption)
     }
 
@@ -321,5 +323,9 @@ function Edit(editButton, textElementId, textAreaElementId, fieldName) {
 }
 
 function AppendTestCase(projectId) {
+    let appendCaseSelect = document.getElementById("append-case-select")
+    let id = appendCaseSelect.options[appendCaseSelect.selectedIndex].__custom__.id
+    let data = id
+    let response = post_request(window.location.href + "/case/append", id)
     window.close_dialog('append-dialog', 'append-dialog-overlay')
 }
