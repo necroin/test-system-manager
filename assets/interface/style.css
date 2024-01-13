@@ -71,6 +71,13 @@ button:hover {
     min-height: 30px;
 }
 
+.dialog select {
+    background-color:  rgb(30, 30, 30);
+    color: white;
+    border: 1px solid gray;
+    min-height: 30px;
+}
+
 .dialog-buttons {
     display: flex;
     justify-content: flex-end;
@@ -83,6 +90,10 @@ button:hover {
     width: 100px;
     padding: 10px;
     margin-top: 10px;
+}
+
+.dialog-buttons button:hover {
+    background-color: rgb(60, 60, 60);
 }
 
 #menu_bar {

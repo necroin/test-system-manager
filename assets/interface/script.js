@@ -209,9 +209,12 @@ function GetTestCase() {
     }
 }
 
-function GetTestPlan() {
+function GetTestPlan(projectId) {
     let testCasesList = document.getElementById("test-cases");
     testCasesList.replaceChildren();
+
+    let appendCaseSelect = document.getElementById("append-case-select")
+
     let response = post_request(window.location.href + "/get");
     let data = JSON.parse(response)
     
@@ -221,7 +224,6 @@ function GetTestPlan() {
     }
 
     let records = data.cases;
-    let projectId = window.location.pathname.split('/')[2];
     for (recordIndex in records) {
         let element = document.createElement("div");
         element.className = "list-item"
@@ -229,13 +231,13 @@ function GetTestPlan() {
         let id = document.createElement("span");
         let name = document.createElement("span");
 
-        id.innerHTML = records[recordIndex].id;
-        name.innerHTML = records[recordIndex].name;
+        id.innerText = records[recordIndex].id;
+        name.innerText = records[recordIndex].name;
 
         element.appendChild(id);
         element.appendChild(name);
 
-        let testCaseId = id.innerHTML;
+        let testCaseId = id.innerText;
         element.onclick = () => OpenPage("/project/" + projectId + "/case/" + testCaseId);
 
         element.addEventListener("dragstart", () => {
@@ -255,6 +257,10 @@ function GetTestPlan() {
         });
 
         testCasesList.appendChild(element);
+
+        let appendCaseOption = document.createElement("option")
+        appendCaseOption.innerText = name.innerText
+        appendCaseSelect.appendChild(appendCaseOption)
     }
 
     const initSortableList = (event) => {
@@ -312,4 +318,8 @@ function Edit(editButton, textElementId, textAreaElementId, fieldName) {
     if (textPlaceholderElement != null) {
         textPlaceholderElement.style.display = "none"
     }
+}
+
+function AppendTestCase(projectId) {
+    window.close_dialog('append-dialog', 'append-dialog-overlay')
 }

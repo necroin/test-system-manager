@@ -8,7 +8,17 @@
     <title>TSM</title>
 </head>
 
-<body onload="window.GetTestPlan()">
+<body onload="window.GetTestPlan('{{.ProjectId}}')">
+    <div id="append-dialog-overlay" class="dialog-overlay">
+        <div id="append-dialog" class="dialog">
+            <span>Тест-кейс</span>
+            <select id="append-case-select"></select>
+            <div class="dialog-buttons">
+                <button onclick="window.close_dialog('append-dialog', 'append-dialog-overlay')">Отменить</button>
+                <button onclick="window.AppendTestCase('{{.ProjectId}}')">Добавить</button>
+            </div>
+        </div>
+    </div>
     <div id="menu_bar">
         <button class="menu_bar_button" onclick="window.OpenPage('/projects')">
             <!-- Home -->
@@ -24,7 +34,8 @@
                 <path d="M3,4H7V8H3V4M9,5V7H21V5H9M3,10H7V14H3V10M9,11V13H21V11H9M3,16H7V20H3V16M9,17V19H21V17H9" />
             </svg>
         </button>
-        <button class="menu_bar_button" onclick="window.OpenPage('/project/{{.ProjectId}}/plans')" style="background-color: gray;">
+        <button class="menu_bar_button" onclick="window.OpenPage('/project/{{.ProjectId}}/plans')"
+            style="background-color: gray;">
             <!-- Test Plans -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
                 <title>Test Plans</title>
@@ -72,8 +83,14 @@
                     <textarea class="edit-textarea" id="description-text-area" style="display: none;"></textarea>
                 </div>
                 <div class="test-page-element">
-                    <div class="headline">
-                        <span>Тест-кейсы</span>
+                    <div class="edit-header">
+                        <span class="edit-header-text">Тест-кейсы</span>
+                        <button onclick="window.open_dialog('append-dialog', 'append-dialog-overlay')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                                <title>Add Test Case</title>
+                                <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                            </svg>
+                        </button>
                     </div>
                     <div id="test-cases" class="list"></div>
                 </div>
