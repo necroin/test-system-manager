@@ -169,6 +169,7 @@ function GetTestCases(projectId) {
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
         let record = records[recordIndex]
+        console.log(record)
         let element = document.createElement("div");
         element.className = "list-item"
         let id = document.createElement("span");
@@ -185,7 +186,6 @@ function GetTestCases(projectId) {
         var tagsElement = document.createElement("div")
 
         let tag_response = post_request(window.request_url + "/project/" + projectId + "/case/" + testCaseId + "/tags/get")
-        console.log(tag_response)
         let tags = JSON.parse(tag_response).records
 
         for (tagIndex in tags) {
@@ -204,7 +204,7 @@ function GetTestPlans(projectId) {
     let testCasesList = document.getElementById("test-plans");
     testCasesList.replaceChildren();
     let response = post_request(window.request_url + "/project/" + projectId + "/plans/get",
-    JSON.stringify({ "search": GetSearchLineText() }));
+        JSON.stringify({ "search": GetSearchLineText() }));
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
         let record = records[recordIndex]
@@ -228,7 +228,6 @@ function GetTestPlans(projectId) {
         var tagsElement = document.createElement("div")
 
         let tag_response = post_request(window.request_url + "/project/" + projectId + "/plan/" + testPlanId + "/tags/get")
-        console.log(tag_response)
         let tags = JSON.parse(tag_response).records
 
         for (tagIndex in tags) {
@@ -326,11 +325,19 @@ function GetTestCase() {
 
 }
 
+function UpdateTestPlatTestCasesList(testCasesList) {
+    let data = { "cases": [] }
+    for (i = 0; i < testCasesList.children.length; i++) {
+        let testCase = testCasesList.children.item(i)
+        let id = testCase.children.item(0).innerText
+        data["cases"].push({ "id": id })
+    }
+    return post_request(window.location.href + "/update", JSON.stringify(data));
+}
+
 function GetTestPlan(projectId) {
     let testCasesList = document.getElementById("test-cases");
     testCasesList.replaceChildren();
-
-    let appendCaseSelect = document.getElementById("append-case-select")
 
     let response = post_request(window.location.href + "/get");
     let data = JSON.parse(response)
@@ -347,12 +354,24 @@ function GetTestPlan(projectId) {
         element.draggable = true
         let id = document.createElement("span");
         let name = document.createElement("span");
+        let spacer = document.createElement("div")
+        spacer.style.flexGrow = 1
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "Удалить"
+        deleteButton.className = "hidden"
+        deleteButton.onclick = (event) => {
+            event.stopPropagation()
+            testCasesList.removeChild(element)
+            UpdateTestPlatTestCasesList(testCasesList)
+        }
 
         id.innerText = records[recordIndex].id;
         name.innerText = records[recordIndex].name;
 
         element.appendChild(id);
         element.appendChild(name);
+        element.appendChild(spacer);
+        element.appendChild(deleteButton);
 
         let testCaseId = id.innerText;
         element.onclick = () => OpenPage("/project/" + projectId + "/case/" + testCaseId);
@@ -374,12 +393,6 @@ function GetTestPlan(projectId) {
         });
 
         testCasesList.appendChild(element);
-
-        let appendCaseOption = document.createElement("option")
-        appendCaseOption.innerText = name.innerText
-        appendCaseOption.__custom__ = {}
-        appendCaseOption.__custom__.id = testCaseId
-        appendCaseSelect.appendChild(appendCaseOption)
     }
 
     const initSortableList = (event) => {
@@ -394,7 +407,24 @@ function GetTestPlan(projectId) {
     testCasesList.addEventListener("dragover", initSortableList);
     testCasesList.addEventListener("dragenter", event => event.preventDefault());
 
-  UpdateTestPlanTags();
+    let appendCaseSelect = document.getElementById("append-case-select")
+
+    let testCasesResponse = post_request(
+        window.request_url + "/project/" + projectId + "/cases/get",
+        JSON.stringify({ "search": "" })
+    );
+
+    let testCaseRecords = JSON.parse(testCasesResponse).records;
+    for (recordIndex in testCaseRecords) {
+        let record = testCaseRecords[recordIndex]
+        let appendCaseOption = document.createElement("option")
+        appendCaseOption.innerText = record.fields.Name;
+        appendCaseOption.__custom__ = {}
+        appendCaseOption.__custom__.id = record.fields.Id;
+        appendCaseSelect.appendChild(appendCaseOption)
+    }
+
+    UpdateTestPlanTags();
 }
 
 function Edit(editButton, textElementId, textAreaElementId, fieldName) {
