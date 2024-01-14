@@ -64,7 +64,7 @@
                 <span class="settings-item-headline">Имя проекта</span>
                 <div>
                     <input type="text" id="settings-name-input" value="{{.ProjectName}}">
-                    <button>Переименовать</button>
+                    <button onclick="window.RenameProject('{{.ProjectId}}')">Переименовать</button>
                 </div>
             </div>
             <div class="settings-item">

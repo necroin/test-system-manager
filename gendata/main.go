@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
 	"tsm/src/config"
 	"tsm/src/db/dbi"
@@ -9,6 +10,10 @@ import (
 
 const (
 	configPath = "config.yml"
+)
+
+var (
+	users = []string{"kirill", "olya", "polina", "andrew", "maxim"}
 )
 
 func main() {
@@ -24,6 +29,34 @@ func main() {
 		panic(err)
 	}
 	defer db.Close()
+
+	fmt.Println("Generating Users.")
+	for _, username := range users {
+		password := "password"
+		token := hex.EncodeToString([]byte(username + ";" + password))
+
+		response := db.InsertRequest(&dbi.Request{
+			Table: "TSM_Users",
+			Fields: []dbi.Field{
+				{
+					Name:  "Username",
+					Value: fmt.Sprintf("'%s'", username),
+				},
+				{
+					Name:  "Password",
+					Value: fmt.Sprintf("'%s'", password),
+				},
+				{
+					Name:  "Token",
+					Value: fmt.Sprintf("'%s'", token),
+				},
+			},
+		})
+
+		if response.Error != nil {
+			panic(response.Error)
+		}
+	}
 
 	fmt.Println("Generating Project.")
 	for i := 1; i <= 20; i++ {
@@ -213,5 +246,29 @@ func main() {
 		}
 	}
 
+	fmt.Println("Generating TSM_ProjectUsers.")
+	for i := 1; i <= 20; i++ {
+		response := db.InsertRequest(&dbi.Request{
+			Table: "TSM_ProjectUsers",
+			Fields: []dbi.Field{
+				{
+					Name:  "Username",
+					Value: "'kirill'",
+				},
+				{
+					Name:  "ProjectId",
+					Value: fmt.Sprintf("%d", i),
+				},
+				{
+					Name:  "Role",
+					Value: "'Creator'",
+				},
+			},
+		})
+
+		if response.Error != nil {
+			panic(response.Error)
+		}
+	}
 	fmt.Println("Finished.")
 }

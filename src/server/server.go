@@ -12,6 +12,7 @@ import (
 	"text/template"
 	"time"
 	"tsm/src/db/dbi"
+	"tsm/src/logger"
 	"tsm/src/settings"
 
 	"github.com/gorilla/mux"
@@ -93,4 +94,67 @@ func (server *Server) PageHandler(responseWriter http.ResponseWriter, htmlPath s
 	pageTemplate, _ := template.New("HtmpPage").Parse(string(html))
 
 	pageTemplate.Execute(responseWriter, pageDescriptor)
+}
+
+func (server *Server) FindUsernameByToken(token string) string {
+	response := server.db.SelectRequest(&dbi.Request{
+		Table: "TSM_Users",
+		Fields: []dbi.Field{{
+			Name: "Username",
+		}},
+		Filters: []dbi.Filter{{
+			Name:     "Token",
+			Operator: "=",
+			Value:    fmt.Sprintf("'%s'", token),
+		}},
+	})
+
+	logger.Debug("%#v", response)
+
+	if response.Error != nil {
+		logger.Error("%s", response.Error)
+		return ""
+	}
+
+	if len(response.Records) == 0 {
+		return ""
+	}
+
+	username := response.Records[0].Fields["Username"]
+	return username
+}
+
+func (server *Server) FindUserProjectRole(username string, projectId string) string {
+	response := server.db.SelectRequest(&dbi.Request{
+		Table: "TSM_ProjectUsers",
+		Fields: []dbi.Field{{
+			Name: "Role",
+		}},
+		Filters: []dbi.Filter{
+			{
+				Name:     "Username",
+				Operator: "=",
+				Value:    fmt.Sprintf("'%s'", username),
+			},
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	logger.Debug("%#v", response)
+
+	if response.Error != nil {
+		logger.Error("%s", response.Error)
+		return ""
+	}
+
+	if len(response.Records) == 0 {
+		return ""
+	}
+
+	role := response.Records[0].Fields["Role"]
+	return role
 }

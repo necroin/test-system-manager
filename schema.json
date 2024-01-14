@@ -39,8 +39,8 @@
         "name": "TSM_ProjectUsers",
         "fields": [
             {
-                "name": "UserId",
-                "type": "integer"
+                "name": "Username",
+                "type": "string"
             },
             {
                 "name": "ProjectId",
@@ -52,7 +52,7 @@
             }
         ],
         "primary_key": [
-            "UserId",
+            "Username",
             "ProjectId"
         ]
     },

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"tsm/src/db/dbi"
 	"tsm/src/logger"
+	"tsm/src/settings"
 
 	"github.com/gorilla/mux"
 )
@@ -108,7 +109,7 @@ func (server *Server) ProjectTagsDeleteHandler(responseWriter http.ResponseWrite
 			{
 				Name:     "ObjectType",
 				Operator: "=",
-				Value:    "'Project'",
+				Value:    fmt.Sprintf("'%s'", settings.ObjectTypeProject),
 			},
 		},
 	})

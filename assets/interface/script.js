@@ -478,3 +478,9 @@ function AppendTestCase(projectId) {
     let response = post_request(window.location.href + "/case/append", id)
     window.close_dialog('append-dialog', 'append-dialog-overlay')
 }
+
+function RenameProject(projectId) {
+    let name = document.getElementById("settings-name-input").value
+    let response = post_request(window.request_url + "/project/" + projectId + "/rename", name)
+    location.reload()
+}

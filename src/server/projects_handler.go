@@ -20,6 +20,10 @@ func (server *Server) ProjectsHandler(responseWriter http.ResponseWriter, reques
 }
 
 func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	token := params["token"]
+	username := server.FindUsernameByToken(token)
+
 	projectsRequest := &SearchRequest{}
 	json.NewDecoder(request.Body).Decode(projectsRequest)
 	projectsRequest.SearchFilter = strings.Trim(projectsRequest.SearchFilter, " ")
@@ -115,8 +119,14 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 		return
 	}
 
+	projects := []dbi.Record{}
 	for _, record := range projectsResponse.Records {
 		projectId := record.Fields["Id"]
+
+		role := server.FindUserProjectRole(username, projectId)
+		if role == "" {
+			continue
+		}
 
 		testCaseResponse := server.db.SelectRequest(&dbi.Request{
 			Table: "TSM_TestCase",
@@ -141,7 +151,9 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 		}
 
 		record.Fields["TestCaseCount"] = testCaseResponse.Records[0].Fields["Count(*)"]
+		projects = append(projects, record)
 	}
+	projectsResponse.Records = projects
 
 	json.NewEncoder(responseWriter).Encode(projectsResponse)
 }

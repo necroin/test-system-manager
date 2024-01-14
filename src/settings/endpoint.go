@@ -24,6 +24,7 @@ const (
 	ServerProjectStatisticsEndpoint       = "/{token}/project/{id:[0-9]+}/statistics"
 	ServerProjectStatisticsSelectEndpoint = "/{token}/project/{id:[0-9]+}/statistics/get"
 	ServerProjectSettingsEndpoint         = "/{token}/project/{id:[0-9]+}/settings"
+	ServerProjectRenameEndpoint           = "/{token}/project/{id:[0-9]+}/rename"
 
 	ServerProjectCasesEndpoint       = "/{token}/project/{id:[0-9]+}/cases"
 	ServerProjectCasesSelectEndpoint = "/{token}/project/{id:[0-9]+}/cases/get"
