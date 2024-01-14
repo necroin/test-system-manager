@@ -57,6 +57,10 @@ func main() {
 	server.AddHandler(settings.ServerProjectPlansSelectEndpoint, server.ProjectPlansSelectHandler, "POST", "GET")
 	server.AddHandler(settings.ServerProjectPlansInsertEndpoint, server.ProjectPlansInsertHandler, "POST", "GET")
 
+	server.AddHandler(settings.ServerPlanTagsSelectEndpoint, server.PlanTagsSelectHandler, "POST", "GET")
+	server.AddHandler(settings.ServerPlanTagsInsertEndpoint, server.PlanTagsInsertHandler, "POST", "GET")
+	server.AddHandler(settings.ServerPlanTagsDeleteEndpoint, server.PlanTagsDeleteHandler, "POST", "GET")
+
 	server.AddHandler(settings.ServerProjectSettingsEndpoint, server.ProjectSettingsHandler, "GET")
 
 	server.AddHandler(settings.ServerProjectStatisticsEndpoint, server.ProjectStatisticsHandler, "GET")

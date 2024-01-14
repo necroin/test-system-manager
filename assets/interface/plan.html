@@ -103,16 +103,19 @@
                 </div>
             </div>
             <div class="test-page-element tags">
-                <span class="test-page-element-header">Тэги</span>
-                <div>
-                    <input type="text" id="tags-input">
-                    <button onclick="window.AddTestPlanTag('{{.ProjectId}}')">Добавить</button>
+                <div class="edit-header">
+                    <span class="edit-header-text">Тэги</span>
                 </div>
-                <div class="with-text-placeholder tags-list"></div>
+                <span id="tag-adder">
+                    <input type="text" id="settings-tags-input">
+                    <button onclick="window.AddTestCaseTag('{{.ProjectId}}')">Добавить</button>
+                </span>
+                <div id="tags" class="with-text-placeholder tags-list"></div>
                 <span class="text-placeholder settings-item-content">Нет тэгов</span>
             </div>
         </div>
     </div>
+
 </body>
 
 </html>

@@ -184,5 +184,34 @@ func main() {
 		}
 	}
 
+	fmt.Println("Generating TSM_Tags for test plans.")
+	for projectId := 1; projectId <= 20; projectId++ {
+		for testPlanId := 1; testPlanId <= projectId; testPlanId++ {
+			for tagId := 1; tagId <= testPlanId; tagId++ {
+				response := db.InsertRequest(&dbi.Request{
+					Table: "TSM_Tags",
+					Fields: []dbi.Field{
+						{
+							Name:  "ObjectId",
+							Value: fmt.Sprintf("'%d;%d'", projectId, testPlanId),
+						},
+						{
+							Name:  "ObjectType",
+							Value: "'TestPlan'",
+						},
+						{
+							Name:  "Name",
+							Value: fmt.Sprintf("'Generated Tag %d'", tagId),
+						},
+					},
+				})
+
+				if response.Error != nil {
+					panic(response.Error)
+				}
+			}
+		}
+	}
+
 	fmt.Println("Finished.")
 }
