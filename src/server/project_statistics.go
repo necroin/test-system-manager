@@ -10,6 +10,7 @@ import (
 
 func (server *Server) ProjectStatisticsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
+	token := params["token"]
 	projectId := params["id"]
 
 	projectsResponse := server.db.SelectRequest(&dbi.Request{
@@ -37,7 +38,7 @@ func (server *Server) ProjectStatisticsHandler(responseWriter http.ResponseWrite
 		ProjectId:   projectId,
 		ProjectName: projectsResponse.Records[0].Fields["Name"],
 	}
-	server.PageHandler(responseWriter, settings.InterfaceProjectStatisticsHTML, PageDescriptor)
+	server.PageHandler(responseWriter, settings.InterfaceProjectStatisticsHTML, PageDescriptor, token)
 }
 
 func (server *Server) ProjectStatisticsSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {

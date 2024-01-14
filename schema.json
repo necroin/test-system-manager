@@ -19,20 +19,20 @@
         "name": "TSM_Users",
         "fields": [
             {
-                "name": "Id",
-                "type": "integer"
-            },
-            {
-                "name": "Name",
+                "name": "Username",
                 "type": "string"
             },
             {
                 "name": "Password",
                 "type": "string"
+            },
+            {
+                "name": "Token",
+                "type": "string"
             }
         ],
         "primary_key": [
-            "Id"
+            "Username"
         ]
     },
     {

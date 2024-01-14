@@ -15,6 +15,7 @@ import (
 
 func (server *Server) ProjectPlansHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
+	token := params["token"]
 	projectId := params["id"]
 
 	projectsResponse := server.db.SelectRequest(&dbi.Request{
@@ -42,7 +43,7 @@ func (server *Server) ProjectPlansHandler(responseWriter http.ResponseWriter, re
 		ProjectId:   projectId,
 		ProjectName: projectsResponse.Records[0].Fields["Name"],
 	}
-	server.PageHandler(responseWriter, settings.InterfaceProjectPlansHTML, PageDescriptor)
+	server.PageHandler(responseWriter, settings.InterfaceProjectPlansHTML, PageDescriptor, token)
 }
 
 func (server *Server) ProjectPlansSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {

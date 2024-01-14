@@ -80,14 +80,14 @@ func (server *Server) WaitStart() error {
 	return fmt.Errorf("[Server] [WaitStart] [Error] failed get server status")
 }
 
-func (server *Server) PageHandler(responseWriter http.ResponseWriter, htmlPath string, pageDescriptor PageDescriptor) {
-	pageDescriptor.Url = server.url
+func (server *Server) PageHandler(responseWriter http.ResponseWriter, htmlPath string, pageDescriptor PageDescriptor, token string) {
+	pageDescriptor.Url = server.url + "/" + token
 
 	style, _ := os.ReadFile(settings.InterfaceStylePath)
 	pageDescriptor.Style = fmt.Sprintf(`<style type="text/css">%s</style>`, style)
 
 	script, _ := os.ReadFile(settings.InterfaceScriptPath)
-	pageDescriptor.Script = fmt.Sprintf(fmt.Sprintf(`<script type="text/javascript">%s</script>`, script), server.url)
+	pageDescriptor.Script = fmt.Sprintf(fmt.Sprintf(`<script type="text/javascript">%s</script>`, script), pageDescriptor.Url)
 
 	html, _ := os.ReadFile(htmlPath)
 	pageTemplate, _ := template.New("HtmpPage").Parse(string(html))

@@ -13,6 +13,7 @@ import (
 
 func (server *Server) ProjectCaseHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
+	token := params["token"]
 	projectId := params["id"]
 	testCaseId := params["caseId"]
 
@@ -47,7 +48,7 @@ func (server *Server) ProjectCaseHandler(responseWriter http.ResponseWriter, req
 		TestCaseId:   testCaseId,
 		TestCaseName: response.Records[0].Fields["Name"],
 	}
-	server.PageHandler(responseWriter, settings.InterfaceCaseHTML, PageDescriptor)
+	server.PageHandler(responseWriter, settings.InterfaceCaseHTML, PageDescriptor, token)
 }
 
 func (server *Server) ProjectCaseSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {

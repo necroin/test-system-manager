@@ -36,6 +36,9 @@ func main() {
 	server := server.New(config.Url, db)
 
 	server.AddHandler(settings.ServerStatusEndpoint, server.StatusHandler, "GET")
+	server.AddHandler(settings.ServerAuthEndpoint, server.AuthHandler, "GET")
+	server.AddHandler(settings.ServerAuthRegisterEndpoint, server.AuthRegisterHandler, "POST")
+	server.AddHandler(settings.ServerAuthTokenEndpoint, server.AuthTokenHandler, "POST")
 
 	server.AddHandler(settings.ServerProjectsEndpoint, server.ProjectsHandler, "GET")
 	server.AddHandler(settings.ServerProjectsSelectEndpoint, server.ProjectsSelectHandler, "POST", "GET")

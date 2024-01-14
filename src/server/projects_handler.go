@@ -9,10 +9,14 @@ import (
 	"tsm/src/db/dbi"
 	"tsm/src/logger"
 	"tsm/src/settings"
+
+	"github.com/gorilla/mux"
 )
 
 func (server *Server) ProjectsHandler(responseWriter http.ResponseWriter, request *http.Request) {
-	server.PageHandler(responseWriter, settings.InterfaceProjectsHTML, PageDescriptor{})
+	params := mux.Vars(request)
+	token := params["token"]
+	server.PageHandler(responseWriter, settings.InterfaceProjectsHTML, PageDescriptor{}, token)
 }
 
 func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {

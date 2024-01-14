@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{.Style}}
+    {{.Script}}
+    <title>VSS</title>
+</head>
+
+<body>
+    <div id="auth-form">
+        <div id="auth-header">
+            <span>Авторизация</span>
+        </div>
+        <span>Логин</span>
+        <input id="auth-name" type="text">
+        <span>Пароль</span>
+        <input id="auth-password" type="text">
+        <button id="auth-button" onclick="window.auth()">Войти</button>
+        <button id="auth-button" onclick="window.register()">Зарегестрироваться</button>
+    </div>
+</body>

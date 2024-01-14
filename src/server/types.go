@@ -1,5 +1,10 @@
 package server
 
+type ClientAuth struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 type PageDescriptor struct {
 	Url          string
 	Style        string

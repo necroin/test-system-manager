@@ -15,6 +15,7 @@ import (
 
 func (server *Server) ProjectPlanHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
+	token := params["token"]
 	projectId := params["id"]
 	testPlanId := params["planId"]
 
@@ -49,7 +50,7 @@ func (server *Server) ProjectPlanHandler(responseWriter http.ResponseWriter, req
 		TestPlanId:   testPlanId,
 		TestPlanName: response.Records[0].Fields["Name"],
 	}
-	server.PageHandler(responseWriter, settings.InterfacePlanHTML, PageDescriptor)
+	server.PageHandler(responseWriter, settings.InterfacePlanHTML, PageDescriptor, token)
 }
 
 func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {
