@@ -26,6 +26,10 @@ const (
 	ServerProjectSettingsEndpoint         = "/{token}/project/{id:[0-9]+}/settings"
 	ServerProjectRenameEndpoint           = "/{token}/project/{id:[0-9]+}/rename"
 
+	ServerProjectCollaboratorsEndpoint       = "/{token}/project/{id:[0-9]+}/collaborators"
+	ServerProjectCollaboratorsAddEndpoint    = "/{token}/project/{id:[0-9]+}/collaborators/add"
+	ServerProjectCollaboratorsDeleteEndpoint = "/{token}/project/{id:[0-9]+}/collaborators/delete"
+
 	ServerProjectCasesEndpoint       = "/{token}/project/{id:[0-9]+}/cases"
 	ServerProjectCasesSelectEndpoint = "/{token}/project/{id:[0-9]+}/cases/get"
 	ServerProjectCasesInsertEndpoint = "/{token}/project/{id:[0-9]+}/cases/insert"

@@ -122,6 +122,24 @@ function GetProjects() {
     }
 }
 
+function RenameProject(projectId) {
+    let name = document.getElementById("settings-name-input").value
+    let response = post_request(window.request_url + "/project/" + projectId + "/rename", name)
+    location.reload()
+}
+
+function AddProjectUser(projectId) {
+    let user = document.getElementById("settings-collaborators-input").value
+    let response = post_request(window.request_url + "/project/" + projectId + "/collaborators/add", user)
+    location.reload()
+}
+
+function DeleteProjectUser(projectId) {
+    let user = document.getElementById("settings-collaborators-input").value
+    let response = post_request(window.request_url + "/project/" + projectId + "/collaborators/delete", user)
+    location.reload()
+}
+
 function AddTestCaseTag() {
     let tag = document.getElementById("settings-tags-input").value
     if (tag != "") {
@@ -242,6 +260,11 @@ function GetTestPlans(projectId) {
     }
 }
 
+function GetProjectCollaborators(projectId) {
+    let response = post_request(window.request_url + "/project/" + projectId + "/collaborators")
+    return JSON.parse(response)
+}
+
 function GetProjectSettings(projectId) {
     let tagsList = document.getElementById("tags");
     tagsList.replaceChildren()
@@ -261,7 +284,53 @@ function GetProjectSettings(projectId) {
         div.appendChild(deleteButton)
         tagsList.appendChild(div)
     }
+
+    let collaboratorsList = document.getElementById("collaborators")
+    collaboratorsList.replaceChildren()
+    let collaborators = GetProjectCollaborators(projectId).records
+    for (index in collaborators) {
+        let collaborator = collaborators[index]
+
+        if (collaborator.fields.Role != "Создатель") {
+            let listElement = document.createElement("div")
+            let nameElement = document.createElement("span")
+            nameElement.innerText = collaborator.fields.Username
+
+            let roleSelect = document.createElement("select")
+
+            let guestOption = document.createElement("option")
+            let analystOption = document.createElement("option")
+            let testerOption = document.createElement("option")
+
+            guestOption.innerText = "Гость"
+            analystOption.innerText = "Аналитик"
+            testerOption.innerText = "Тестировщик"
+
+            roleSelect.appendChild(guestOption)
+            roleSelect.appendChild(analystOption)
+            roleSelect.appendChild(testerOption)
+
+            listElement.appendChild(nameElement)
+            listElement.appendChild(roleSelect)
+
+
+            if (collaborator.fields.Role == "Аналитик") {
+                roleSelect.selectedIndex = 1
+            }
+
+            if (collaborator.fields.Role == "Тестировщик") {
+                roleSelect.selectedIndex = 2
+            }
+
+            let deleteButton = document.createElement("button")
+            deleteButton.innerText = "✖"
+            listElement.appendChild(deleteButton)
+
+            collaboratorsList.appendChild(listElement)
+        }
+    }
 }
+
 function UpdateTestCaseTags() {
     let tagsList = document.getElementById("tags");
     tagsList.replaceChildren()
@@ -477,10 +546,4 @@ function AppendTestCase(projectId) {
     let data = id
     let response = post_request(window.location.href + "/case/append", id)
     window.close_dialog('append-dialog', 'append-dialog-overlay')
-}
-
-function RenameProject(projectId) {
-    let name = document.getElementById("settings-name-input").value
-    let response = post_request(window.request_url + "/project/" + projectId + "/rename", name)
-    location.reload()
 }

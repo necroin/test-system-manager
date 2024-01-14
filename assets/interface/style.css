@@ -375,3 +375,9 @@ button:hover {
 .settings-item-headline {
     font-size: xx-large;
 }
+
+.settings-item select {
+    background-color: rgb(30, 30, 30);
+    color: white;
+    border: 2px grey solid;
+}

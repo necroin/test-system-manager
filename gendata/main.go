@@ -261,7 +261,51 @@ func main() {
 				},
 				{
 					Name:  "Role",
-					Value: "'Creator'",
+					Value: "'Создатель'",
+				},
+			},
+		})
+
+		if response.Error != nil {
+			panic(response.Error)
+		}
+
+		response = db.InsertRequest(&dbi.Request{
+			Table: "TSM_ProjectUsers",
+			Fields: []dbi.Field{
+				{
+					Name:  "Username",
+					Value: "'olya'",
+				},
+				{
+					Name:  "ProjectId",
+					Value: fmt.Sprintf("%d", i),
+				},
+				{
+					Name:  "Role",
+					Value: "'Аналитик'",
+				},
+			},
+		})
+
+		if response.Error != nil {
+			panic(response.Error)
+		}
+
+		response = db.InsertRequest(&dbi.Request{
+			Table: "TSM_ProjectUsers",
+			Fields: []dbi.Field{
+				{
+					Name:  "Username",
+					Value: "'polina'",
+				},
+				{
+					Name:  "ProjectId",
+					Value: fmt.Sprintf("%d", i),
+				},
+				{
+					Name:  "Role",
+					Value: "'Тестировщик'",
 				},
 			},
 		})

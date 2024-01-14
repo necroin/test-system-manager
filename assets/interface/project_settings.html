@@ -71,8 +71,10 @@
                 <span class="settings-item-headline">Участники</span>
                 <div>
                     <input type="text" id="settings-collaborators-input">
-                    <button>Добавить</button>
+                    <button onclick="window.AddProjectUser('{{.ProjectId}}')">Добавить</button>
+
                 </div>
+                <div id="collaborators" class="with-text-placeholder tags-list"></div>
                 <span class="text-placeholder settings-item-content">Нет участников</span>
             </div>
             <div class="settings-item">

@@ -23,3 +23,10 @@ const (
 	ObjectTypeTestCase = "TestCase"
 	ObjectTypeTestPlan = "TestPlan"
 )
+
+const (
+	ProjectRoleCreator = "Создатель"
+	ProjectRoleAnalyst = "Аналитик"
+	ProjectRoleTester  = "Тестировщик"
+	ProjectRoleGuest   = "Гость"
+)

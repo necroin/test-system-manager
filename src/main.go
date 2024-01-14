@@ -67,6 +67,10 @@ func main() {
 	server.AddHandler(settings.ServerProjectSettingsEndpoint, server.ProjectSettingsHandler, "GET")
 	server.AddHandler(settings.ServerProjectRenameEndpoint, server.ProjectRenameHandler, "POST", "GET")
 
+	server.AddHandler(settings.ServerProjectCollaboratorsEndpoint, server.ProjectCollaboratorsHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectCollaboratorsAddEndpoint, server.ProjectCollaboratorsAddHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectCollaboratorsDeleteEndpoint, server.ProjectCollaboratorsDeleteHandler, "POST", "GET")
+
 	server.AddHandler(settings.ServerProjectStatisticsEndpoint, server.ProjectStatisticsHandler, "GET")
 	server.AddHandler(settings.ServerProjectStatisticsSelectEndpoint, server.ProjectStatisticsSelectHandler, "POST", "GET")
 
