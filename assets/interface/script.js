@@ -68,6 +68,7 @@ function AddProjectTag(projectId) {
     }
 }
 
+
 function DeleteProjectTag(projectId, tag) {
     let response = post_request(window.request_url + "/project/" + projectId + "/tags/delete", tag)
     GetProjectSettings(projectId)
@@ -78,6 +79,121 @@ function GetProjectTags(projectId) {
     let data = JSON.parse(response)
     return data.records
 }
+
+function AddCaseComment(projectId, testCaseId) {
+    let comment = document.getElementById("case-comment-input").value
+    if (comment != "") {
+        let response = post_request(window.request_url + "/project/" + projectId + "/case/" + testCaseId + "/comments/insert", comment)
+        GetCaseComments(projectId, testCaseId)
+    }
+    window.location.reload()
+}
+
+function DeleteCaseComment(projectId, testCaseId, id) {
+    let response = post_request(window.request_url + "/project/" + projectId + "/case/" + testCaseId + "/comments/delete/" + id)
+    GetCaseComments(projectId, testCaseId)
+}
+
+function GetCaseComment(projectId, testCaseId) {
+    let response = post_request(window.request_url + "/project/" + projectId + "/case/" + testCaseId + "/comments/get")
+    return response
+}
+
+function GetCaseComments(projectId, testCaseId) {
+    let commentsList = document.getElementById("case-comments-list");
+    commentsList.replaceChildren()
+
+    let response = GetCaseComment(projectId, testCaseId)
+    let records = JSON.parse(response).records;
+    for (commentIndex in records) {
+        let record = records[commentIndex]
+        let element = document.createElement("div")
+        element.className = "list-item"
+        let username = document.createElement("span");
+        let content = document.createElement("span");
+        let id = document.createElement("span");
+        username.innerText = record.fields.Username;
+        id.innerText = record.fields.Id;
+        content.innerText = record.fields.Content;
+
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { DeleteCaseComment(projectId, testCaseId, id.innerText) }
+
+
+        element.appendChild(username);
+        element.appendChild(id);
+        element.appendChild(content);
+        element.appendChild(deleteButton);
+        commentsList.appendChild(element);
+
+    }
+
+}
+
+
+
+
+
+function AddPlanComment(projectId, testPlanId) {
+    let comment = document.getElementById("plan-comment-input").value
+    if (comment != "") {
+        let response = post_request(window.request_url + "/project/" + projectId + "/plan/" + testPlanId + "/comments/insert", comment)
+        GetPlanComments(projectId, testPlanId)
+    }
+    window.location.reload()
+}
+
+function DeletePlanComment(projectId, testPlanId, id) {
+    let response = post_request(window.request_url + "/project/" + projectId + "/plan/" + testPlanId + "/comments/delete/" + id)
+    GetPlanComments(projectId, testPlanId)
+}
+
+function GetPlanComment(projectId, testPlanId) {
+    let response = post_request(window.request_url + "/project/" + projectId + "/plan/" + testPlanId + "/comments/get")
+    return response
+}
+
+function GetPlanComments(projectId, testPlanId) {
+    let commentsList = document.getElementById("plan-comments-list");
+    commentsList.replaceChildren()
+
+    let response = GetPlanComment(projectId, testPlanId)
+    let records = JSON.parse(response).records;
+    for (commentIndex in records) {
+        let record = records[commentIndex]
+        let element = document.createElement("div")
+        element.className = "list-item"
+        let username = document.createElement("span");
+        let content = document.createElement("span");
+        let id = document.createElement("span");
+        username.innerText = record.fields.Username;
+        id.innerText = record.fields.Id;
+        content.innerText = record.fields.Content;
+
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { DeleteCaseComment(projectId, testCaseId, id.innerText) }
+
+
+        element.appendChild(username);
+        element.appendChild(id);
+        element.appendChild(content);
+        element.appendChild(deleteButton);
+        commentsList.appendChild(element);
+
+    }
+
+}
+
+
+
+
+
+
+
 
 function GetProjects() {
     let projectsList = document.getElementById("projects");
@@ -392,6 +508,33 @@ function GetTestCase() {
 
     UpdateTestCaseTags()
 
+    let commentsList = document.getElementById("case-comments-list");
+    commentsList.replaceChildren()
+    let comments = post_request(window.location.href + "/comments/get");
+    let records = JSON.parse(comments).records;
+    for (commentIndex in records) {
+        let record = records[commentIndex]
+        let element = document.createElement("div")
+        element.className = "list-item"
+        let username = document.createElement("span");
+        let id = document.createElement("span");
+        let content = document.createElement("span");
+        username.innerText = record.fields.Username;
+        id.innerText = record.fields.Id;
+        content.innerText = record.fields.Content;
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { post_request(window.location.href + "/comments/delete/" + id.innerText), window.location.reload() }
+
+
+        element.appendChild(username);
+        element.appendChild(id);
+        element.appendChild(content);
+        element.appendChild(deleteButton);
+        commentsList.appendChild(element);
+
+    }
 }
 
 function UpdateTestPlatTestCasesList(testCasesList) {
@@ -494,6 +637,33 @@ function GetTestPlan(projectId) {
     }
 
     UpdateTestPlanTags();
+    let commentsList = document.getElementById("plan-comments-list");
+    commentsList.replaceChildren()
+    let comments = post_request(window.location.href + "/comments/get");
+    let comment = JSON.parse(comments).records;
+    for (commentIndex in comment) {
+        let record = comment[commentIndex]
+        let elements = document.createElement("div")
+        elements.className = "list-item"
+        let username = document.createElement("span");
+        let id = document.createElement("span");
+        let content = document.createElement("span");
+        username.innerText = record.fields.Username;
+        id.innerText = record.fields.Id;
+        content.innerText = record.fields.Content;
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { post_request(window.location.href + "/comments/delete/" + id.innerText), window.location.reload() }
+
+
+        elements.appendChild(username);
+        elements.appendChild(id);
+        elements.appendChild(content);
+        elements.appendChild(deleteButton);
+        commentsList.appendChild(elements);
+
+    }
 }
 
 function Edit(editButton, textElementId, textAreaElementId, fieldName) {

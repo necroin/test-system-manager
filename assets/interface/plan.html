@@ -98,8 +98,9 @@
                     <div class="edit-header">
                         <span>Комментарии</span>
                     </div>
-                    <textarea id="comment-text-area" class="edit-textarea"></textarea>
-                    <button>Комментировать</button>
+                    <input type="text" id="plan-comment-input">
+                    <button type="submit" onclick="window.AddPlanComment('{{.ProjectId}}', '{{.TestPlanId}}') ">Комментировать</button>
+                    <div id="plan-comments-list" class="list"></div>
                 </div>
             </div>
             <div class="test-page-element tags">

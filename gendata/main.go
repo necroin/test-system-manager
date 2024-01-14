@@ -217,6 +217,47 @@ func main() {
 		}
 	}
 
+	fmt.Println("Generating TSM_Comments for cases.")
+	for projectId := 1; projectId <= 5; projectId++ {
+		for commentId := 1; commentId <= projectId; commentId++ {
+			for objectId := 1; objectId <= projectId; objectId++ {
+				response := db.InsertRequest(&dbi.Request{
+					Table: "TSM_Comments",
+					Fields: []dbi.Field{
+						{
+							Name:  "Id",
+							Value: fmt.Sprintf("'%d'", commentId),
+						},
+						{
+							Name:  "ProjectId",
+							Value: fmt.Sprintf("'%d'", projectId),
+						},
+						{
+							Name:  "ObjectId",
+							Value: fmt.Sprintf("'%d'", objectId),
+						},
+						{
+							Name:  "ObjectType",
+							Value: "'case'",
+						},
+						{
+							Name:  "Username",
+							Value: "'Username'",
+						},
+						{
+							Name:  "Content",
+							Value: "'Example of comment'",
+						},
+					},
+				})
+
+				if response.Error != nil {
+					panic(response.Error)
+				}
+			}
+		}
+	}
+
 	fmt.Println("Generating TSM_Tags for test plans.")
 	for projectId := 1; projectId <= 20; projectId++ {
 		for testPlanId := 1; testPlanId <= projectId; testPlanId++ {
@@ -235,6 +276,47 @@ func main() {
 						{
 							Name:  "Name",
 							Value: fmt.Sprintf("'Generated Tag %d'", tagId),
+						},
+					},
+				})
+
+				if response.Error != nil {
+					panic(response.Error)
+				}
+			}
+		}
+	}
+
+	fmt.Println("Generating TSM_Comments for plans.")
+	for projectId := 1; projectId <= 5; projectId++ {
+		for commentId := 1; commentId <= projectId; commentId++ {
+			for objectId := 1; objectId <= projectId; objectId++ {
+				response := db.InsertRequest(&dbi.Request{
+					Table: "TSM_Comments",
+					Fields: []dbi.Field{
+						{
+							Name:  "Id",
+							Value: fmt.Sprintf("'%d'", commentId),
+						},
+						{
+							Name:  "ProjectId",
+							Value: fmt.Sprintf("'%d'", projectId),
+						},
+						{
+							Name:  "ObjectId",
+							Value: fmt.Sprintf("'%d'", objectId),
+						},
+						{
+							Name:  "ObjectType",
+							Value: "'plan'",
+						},
+						{
+							Name:  "Username",
+							Value: "'Username'",
+						},
+						{
+							Name:  "Content",
+							Value: "'Example of comment'",
 						},
 					},
 				})
