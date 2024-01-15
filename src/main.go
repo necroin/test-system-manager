@@ -48,6 +48,10 @@ func main() {
 	server.AddHandler(settings.ServerProjectTagsInsertEndpoint, server.ProjectTagsInsertHandler, "POST", "GET")
 	server.AddHandler(settings.ServerProjectTagsDeleteEndpoint, server.ProjectTagsDeleteHandler, "POST", "GET")
 
+	server.AddHandler(settings.ServerProjectCommentsSelectEndpoint, server.ProjectCommentsSelectHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectCommentsInsertEndpoint, server.ProjectCommentsInsertHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectCommentsDeleteEndpoint, server.ProjectCommentsDeleteHandler, "POST", "GET")
+
 	server.AddHandler(settings.ServerProjectCasesEndpoint, server.ProjectCasesHandler, "GET")
 	server.AddHandler(settings.ServerProjectCasesSelectEndpoint, server.ProjectCasesSelectHandler, "POST", "GET")
 	server.AddHandler(settings.ServerProjectCasesInsertEndpoint, server.ProjectCasesInsertHandler, "POST", "GET")

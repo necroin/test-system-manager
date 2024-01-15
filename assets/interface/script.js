@@ -68,6 +68,7 @@ function AddProjectTag(projectId) {
     }
 }
 
+
 function DeleteProjectTag(projectId, tag) {
     let response = post_request(window.request_url + "/project/" + projectId + "/tags/delete", tag)
     GetProjectSettings(projectId)
@@ -78,6 +79,121 @@ function GetProjectTags(projectId) {
     let data = JSON.parse(response)
     return data.records
 }
+
+function AddCaseComment(projectId, testCaseId) {
+    let comment = document.getElementById("case-comment-input").value
+    if (comment != "") {
+        let response = post_request(window.location +  "/comments/insert", comment)
+        GetCaseComments()
+    }
+    window.location.reload()
+}
+
+function DeleteCaseComment(id) {
+    let response = post_request(window.location +  "/comments/delete/" + id)
+    GetCaseComments()
+}
+
+function GetCaseComment() {
+    let response = post_request(window.location +  "/comments/get")
+    return response
+}
+
+function GetCaseComments(projectId, testCaseId) {
+    let commentsList = document.getElementById("case-comments-list");
+    commentsList.replaceChildren()
+
+    let response = GetCaseComment()
+    let records = JSON.parse(response).records;
+    for (commentIndex in records) {
+        let record = records[commentIndex]
+        let element = document.createElement("div")
+        element.className = "list-item"
+        let username = document.createElement("span");
+        let content = document.createElement("span");
+        let id = document.createElement("span");
+        username.innerText = record.fields.Username;
+        id.innerText = record.fields.Id;
+        content.innerText = record.fields.Content;
+
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { DeleteCaseComment(id.innerText) }
+
+
+        element.appendChild(username);
+        element.appendChild(id);
+        element.appendChild(content);
+        element.appendChild(deleteButton);
+        commentsList.appendChild(element);
+
+    }
+
+}
+
+
+
+
+
+function AddPlanComment() {
+    let comment = document.getElementById("plan-comment-input").value
+    if (comment != "") {
+        let response = post_request(window.location + "/comments/insert", comment)
+        GetPlanComments()
+    }
+    window.location.reload()
+}
+
+function DeletePlanComment(id) {
+    let response = post_request(window.location +  "/comments/delete/" + id)
+    GetPlanComments()
+}
+
+function GetPlanComment() {
+    let response = post_request(window.location + "/comments/get")
+    return response
+}
+
+function GetPlanComments() {
+    let commentsList = document.getElementById("plan-comments-list");
+    commentsList.replaceChildren()
+
+    let response = GetPlanComment()
+    let records = JSON.parse(response).records;
+    for (commentIndex in records) {
+        let record = records[commentIndex]
+        let element = document.createElement("div")
+        element.className = "list-item"
+        let username = document.createElement("span");
+        let content = document.createElement("span");
+        let id = document.createElement("span");
+        username.innerText = record.fields.Username;
+        id.innerText = record.fields.Id;
+        content.innerText = record.fields.Content;
+
+
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { DeletePlanComment(id.innerText) }
+
+
+        element.appendChild(username);
+        element.appendChild(id);
+        element.appendChild(content);
+        element.appendChild(deleteButton);
+        commentsList.appendChild(element);
+
+    }
+
+}
+
+
+
+
+
+
+
 
 function GetProjects() {
     let projectsList = document.getElementById("projects");
@@ -391,6 +507,7 @@ function GetTestCase() {
     }
 
     UpdateTestCaseTags()
+    GetCaseComments()
 
 }
 
@@ -494,6 +611,8 @@ function GetTestPlan(projectId) {
     }
 
     UpdateTestPlanTags();
+    GetPlanComments();
+
 }
 
 function Edit(editButton, textElementId, textAreaElementId, fieldName) {

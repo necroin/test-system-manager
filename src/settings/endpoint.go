@@ -14,9 +14,12 @@ const (
 	ServerAuthRegisterEndpoint = "/auth/register"
 	ServerAuthTokenEndpoint    = "/auth/token"
 
-	ServerProjectsEndpoint       = "/{token}/projects"
-	ServerProjectsSelectEndpoint = "/{token}/projects/get"
-	ServerProjectsInsertEndpoint = "/{token}/projects/insert"
+	ServerProjectsEndpoint              = "/{token}/projects"
+	ServerProjectsSelectEndpoint        = "/{token}/projects/get"
+	ServerProjectsInsertEndpoint        = "/{token}/projects/insert"
+	ServerProjectCommentsSelectEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/get"
+	ServerProjectCommentsInsertEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/insert"
+	ServerProjectCommentsDeleteEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/delete/{id:[0-9]+}"
 
 	ServerProjectTagsSelectEndpoint       = "/{token}/project/{id:[0-9]+}/tags/get"
 	ServerProjectTagsInsertEndpoint       = "/{token}/project/{id:[0-9]+}/tags/insert"
