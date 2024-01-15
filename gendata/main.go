@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
+	"math/rand"
+	"time"
 	"tsm/src/config"
 	"tsm/src/db/dbi"
 	"tsm/src/db/sql"
@@ -396,5 +398,36 @@ func main() {
 			panic(response.Error)
 		}
 	}
+
+	fmt.Println("Generating TSM_Stat.")
+	for projectId := 1; projectId <= 20; projectId++ {
+		for testPlanId := 1; testPlanId <= projectId; testPlanId++ {
+			for testCaseId := 1; testCaseId <= testPlanId; testCaseId++ {
+				for testRunId := 1; testRunId <= 2; testRunId++ {
+					runResult := "Success"
+					if rand.Intn(2) == 0 {
+						runResult = "Fail"
+					}
+
+					response := db.InsertRequest(&dbi.Request{
+						Table: "TSM_Stat",
+						Fields: []dbi.Field{
+							{Name: "ProjectId", Value: fmt.Sprintf("%d", projectId)},
+							{Name: "TestPlanId", Value: fmt.Sprintf("%d", testPlanId)},
+							{Name: "TestCaseId", Value: fmt.Sprintf("%d", testCaseId)},
+							{Name: "TestRunId", Value: fmt.Sprintf("%d", testRunId)},
+							{Name: "Result", Value: fmt.Sprintf("'%s'", runResult)},
+							{Name: "Datetime", Value: fmt.Sprintf("'%s'", time.Now().Format("2006-01-02"))},
+						},
+					})
+
+					if response.Error != nil {
+						panic(response.Error)
+					}
+				}
+			}
+		}
+	}
+
 	fmt.Println("Finished.")
 }

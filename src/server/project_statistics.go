@@ -1,8 +1,10 @@
 package server
 
 import (
+	"encoding/json"
 	"net/http"
 	"tsm/src/db/dbi"
+	"tsm/src/logger"
 	"tsm/src/settings"
 
 	"github.com/gorilla/mux"
@@ -30,6 +32,7 @@ func (server *Server) ProjectStatisticsHandler(responseWriter http.ResponseWrite
 	})
 
 	if projectsResponse.Error != nil {
+		logger.Error(projectsResponse.Error.Error())
 		responseWriter.Write([]byte(projectsResponse.Error.Error()))
 		return
 	}
@@ -42,6 +45,32 @@ func (server *Server) ProjectStatisticsHandler(responseWriter http.ResponseWrite
 }
 
 func (server *Server) ProjectStatisticsSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {
-	// params := mux.Vars(request)
-	// projectId := params["id"]
+	params := mux.Vars(request)
+	projectId := params["id"]
+
+	response := server.db.SelectRequest(&dbi.Request{
+		Table: "TSM_Stat",
+		Fields: []dbi.Field{
+			{Name: "TestPlanId"},
+			{Name: "TestCaseId"},
+			{Name: "TestRunId"},
+			{Name: "Result"},
+			{Name: "Datetime"},
+		},
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	json.NewEncoder(responseWriter).Encode(response)
 }

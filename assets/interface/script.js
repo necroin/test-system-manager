@@ -245,13 +245,69 @@ function DeleteProjectUser(projectId, user) {
 
 function UpdateProjectUser(projectId, user, role) {
     let response = post_request(
-        window.request_url + "/project/" + projectId + "/collaborators/update", 
+        window.request_url + "/project/" + projectId + "/collaborators/update",
         JSON.stringify({
             "username": user,
             "role": role
         })
     )
+}
 
+function GetStatistics(projectId) {
+    let response = post_request(window.request_url + "/project/" + projectId + "/statistics/get")
+    let records = JSON.parse(response).records
+
+    let cases_success_count = 0
+    let cases_fail_count = 0
+
+    let plans_success_count = 0
+    let plans_fail_count = 0
+
+    let lastDate = ""
+
+    let plans = {}
+
+    for (index in records) {
+        let record = records[index]
+        let planRunId = [record.fields.TestPlanId, record.fields.TestRunId].join(";")
+        if (plans[planRunId] == null) {
+            plans[planRunId] = { Result: true }
+        }
+
+        let testCaseResult = record.fields.Result
+        if (testCaseResult == "Success") {
+            cases_success_count += 1
+        }
+
+        if (testCaseResult == "Fail") {
+            cases_fail_count += 1
+            plans[planRunId].Result = false
+        }
+
+        if (record.fields.Datetime > lastDate) {
+            lastDate = record.fields.Datetime
+        }
+    }
+
+    document.getElementById("cases-success-count").innerText = cases_success_count
+    document.getElementById("cases-failed-count").innerText = cases_fail_count
+    let casesSuccessDegree = Number(360 * (cases_success_count / (cases_success_count + cases_fail_count)))
+    document.getElementById("cases-result-relation").style.backgroundImage = "conic-gradient(rgb(152, 201, 123) " + String(casesSuccessDegree) + "deg, rgb(185, 107, 107) 0)"
+
+    for (let [id, result] in plans) {
+        if (result == true) {
+            plans_success_count += 1
+        } else {
+            plans_fail_count += 1
+        }
+    }
+
+    document.getElementById("plans-success-count").innerText = plans_success_count
+    document.getElementById("plans-failed-count").innerText = plans_fail_count
+    let plansSuccessDegree = Number(360 * (plans_success_count / (plans_success_count + plans_fail_count)))
+    document.getElementById("plans-result-relation").style.backgroundImage = "conic-gradient(rgb(152, 201, 123) " + String(plansSuccessDegree) + "deg, rgb(185, 107, 107) 0)"
+
+    document.getElementById("plan-last-date").innerText = lastDate
 }
 
 function AddTestCaseTag() {

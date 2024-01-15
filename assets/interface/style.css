@@ -381,3 +381,49 @@ button:hover {
     color: white;
     border: 2px grey solid;
 }
+
+.satistics-item {
+    display: flex;
+    background-color: rgb(30, 30, 30);
+    border: 1px solid gray;
+    margin: 10px;
+    width: fit-content;
+    height: fit-content;
+}
+
+.satistics-item .pie-chart {
+    display: block;
+    margin: 10px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.satistics-item .pie-chart-header {
+    display: flex;
+    margin: 10px;
+}
+
+.satistics-item .pie-chart-header .color {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.satistics-item .pie-chart-header .text {
+    font-size: 20px;
+    color: white;
+}
+
+.satistics-item.text {
+    display: flex;
+    align-items: center;
+    color: white;
+    width: 700px;
+}
+
+.satistics-item.text span {
+    margin-left: 10px;
+    font-size: xx-large;
+}

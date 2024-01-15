@@ -69,6 +69,62 @@
     </div>
     <div class="main-area">
         <div id="headline">{{.ProjectName}}</div>
+        <div id="statistics">
+            <div style="display: flex;">
+                <div class="satistics-item">
+                    <div id="cases-result-relation" class="pie-chart"></div>
+                    <div>
+                        <div class="pie-chart-header">
+                            <div class="color" style="background-color: rgb(152, 201, 123);"></div>
+                            <span class="text">Success</span>
+                        </div>
+                        <div class="pie-chart-header">
+                            <div class="color" style="background-color: rgb(185, 107, 107);"></div>
+                            <span class="text">Failed</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.05px;">
+                    <div class="satistics-item text">
+                        <span>Общее количество успешных тест-кейсов: </span>
+                        <span id="cases-success-count"></span>
+                    </div>
+                    <div class="satistics-item text">
+                        <span>Общее количество проваленных тест-кейсов: </span>
+                        <span id="cases-failed-count"></span>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex;">
+                <div class="satistics-item">
+                    <div id="plans-result-relation" class="pie-chart"></div>
+                    <div>
+                        <div class="pie-chart-header">
+                            <div class="color" style="background-color: rgb(152, 201, 123);"></div>
+                            <span class="text">Success</span>
+                        </div>
+                        <div class="pie-chart-header">
+                            <div class="color" style="background-color: rgb(185, 107, 107);"></div>
+                            <span class="text">Failed</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <div class="satistics-item text">
+                        <span style="font-size: xx-large;">Общее количество успешных тест-планов: </span>
+                        <span id="plans-success-count"></span>
+                    </div>
+                    <div class="satistics-item text">
+                        <span style="font-size: xx-large;">Общее количество проваленных тест-планов: </span>
+                        <span id="plans-failed-count"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="satistics-item text">
+                <span style="font-size: xx-large;">Последний запуск тест-плана: </span>
+                <span id="plan-last-date"></span>
+            </div>
+        </div>
     </div>
 </body>
 
