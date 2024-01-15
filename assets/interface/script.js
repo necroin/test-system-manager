@@ -79,7 +79,7 @@ function GetProjectTags(projectId) {
     return data.records
 }
 
-function CreateCommentElement(record) {
+function CreateCommentElement(record, deleteComment) {
     let element = document.createElement("div")
     element.style.display = "flex"
     element.style.flexDirection = "column"
@@ -96,7 +96,7 @@ function CreateCommentElement(record) {
 
     let deleteButton = document.createElement("button")
     deleteButton.innerText = "✖"
-    deleteButton.onclick = () => { DeleteCaseComment(record.fields.Id) }
+    deleteButton.onclick = () => { deleteComment(record.fields.Id) }
     deleteButton.style.marginTop = "0px"
     deleteButton.style.alignSelf = "center"
     deleteButton.style.width = "40px"
@@ -146,7 +146,7 @@ function GetCaseComments(projectId, testCaseId) {
     let records = JSON.parse(response).records;
     for (commentIndex in records) {
         let record = records[commentIndex]
-        let element = CreateCommentElement(record)
+        let element = CreateCommentElement(record, DeleteCaseComment)
         commentsList.appendChild(element);
     }
 }
@@ -178,7 +178,7 @@ function GetPlanComments() {
     let records = JSON.parse(response).records;
     for (commentIndex in records) {
         let record = records[commentIndex]
-        let element = CreateCommentElement(record)
+        let element = CreateCommentElement(record, DeletePlanComment)
         commentsList.appendChild(element);
     }
 }
