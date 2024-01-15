@@ -350,10 +350,14 @@ function GetTestPlanTags() {
 }
 
 function GetTestCases(projectId) {
+    let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
     let testCasesList = document.getElementById("test-cases");
     testCasesList.replaceChildren();
     let response = post_request(window.request_url + "/project/" + projectId + "/cases/get",
         JSON.stringify({ "search": GetSearchLineText() }));
+    if (userRole != "Создатель" && userRole != "Аналитик") {
+            document.getElementById("add-case-button").style.display = "none"
+        }
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
         let record = records[recordIndex]
@@ -531,7 +535,8 @@ function GetProjectSettings(projectId) {
     }
 }
 
-function UpdateTestCaseTags() {
+function UpdateTestCaseTags(projectId) {
+    let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
     let tagsList = document.getElementById("tags");
     tagsList.replaceChildren()
     let tags = GetTestCaseTags()
@@ -542,13 +547,15 @@ function UpdateTestCaseTags() {
 
         let tagElement = document.createElement("span")
         tagElement.innerText = tag.fields.Name
-
-        let deleteButton = document.createElement("button")
-        deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { DeleteTestCaseTag(tagElement.innerText) }
-
         div.appendChild(tagElement)
-        div.appendChild(deleteButton)
+
+        if (userRole == "Создатель" || userRole == "Аналитик") {
+            let deleteButton = document.createElement("button")
+            deleteButton.innerText = "✖"
+            deleteButton.onclick = () => { DeleteTestCaseTag(tagElement.innerText) }
+            div.appendChild(deleteButton)
+        }
+
         tagsList.appendChild(div)
     }
 }
@@ -575,8 +582,17 @@ function UpdateTestPlanTags() {
     }
 }
 
-function GetTestCase() {
+function GetTestCase(projectId) {
     let response = post_request(window.location.href + "/get");
+
+    let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
+
+
+    if (userRole != "Создатель" && userRole != "Аналитик") {
+        document.getElementById("tag-adder").style.display = "none"
+        document.getElementById("case-scenario-edit-button").style.display = "none"
+        document.getElementById("case-description-edit-button").style.display = "none"
+    }
 
     let data = JSON.parse(response)
     let description = document.getElementById("description-text")
@@ -590,7 +606,7 @@ function GetTestCase() {
         scenario.innerText = data.scenario
     }
 
-    UpdateTestCaseTags()
+    UpdateTestCaseTags(projectId)
     GetCaseComments()
 
 }
