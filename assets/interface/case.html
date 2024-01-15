@@ -91,7 +91,7 @@
                     <div class="edit-header">
                         <span>Комментарии</span>
                     </div>
-                    <input type="text" id="case-comment-input">
+                    <textarea type="text" id="case-comment-input" class="edit-textarea"></textarea>
                     <button type="submit" onclick="window.AddCaseComment('{{.ProjectId}}', '{{.TestCaseId}}') ">Комментировать</button>
                     <div id="case-comments-list" class="list"></div>
                 </div>

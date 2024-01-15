@@ -68,7 +68,6 @@ function AddProjectTag(projectId) {
     }
 }
 
-
 function DeleteProjectTag(projectId, tag) {
     let response = post_request(window.request_url + "/project/" + projectId + "/tags/delete", tag)
     GetProjectSettings(projectId)
@@ -80,22 +79,62 @@ function GetProjectTags(projectId) {
     return data.records
 }
 
+function CreateCommentElement(record) {
+    let element = document.createElement("div")
+    element.style.display = "flex"
+    element.style.flexDirection = "column"
+    element.className = "list-item"
+
+    let header = document.createElement("div")
+    header.style.display = "flex"
+
+    let username = document.createElement("span");
+    username.innerText = record.fields.Username;
+    username.style.width = "fit-content"
+    username.style.minWidth = "fit-content"
+    username.style.maxWidth = "fit-content"
+
+    let deleteButton = document.createElement("button")
+    deleteButton.innerText = "✖"
+    deleteButton.onclick = () => { DeleteCaseComment(record.fields.Id) }
+    deleteButton.style.marginTop = "0px"
+    deleteButton.style.alignSelf = "center"
+    deleteButton.style.width = "40px"
+
+
+    let spacer = document.createElement("div")
+    spacer.style.flexGrow = 1
+
+    header.appendChild(username)
+    header.appendChild(spacer)
+    header.appendChild(deleteButton)
+
+    let content = document.createElement("span");
+    content.style.wordBreak = "break-all"
+    content.innerText = record.fields.Content;
+
+    element.appendChild(header);
+    element.appendChild(content);
+
+    return element
+}
+
 function AddCaseComment(projectId, testCaseId) {
     let comment = document.getElementById("case-comment-input").value
     if (comment != "") {
-        let response = post_request(window.location +  "/comments/insert", comment)
+        let response = post_request(window.location + "/comments/insert", comment)
         GetCaseComments()
     }
     window.location.reload()
 }
 
 function DeleteCaseComment(id) {
-    let response = post_request(window.location +  "/comments/delete/" + id)
+    let response = post_request(window.location + "/comments/delete/" + id)
     GetCaseComments()
 }
 
 function GetCaseComment() {
-    let response = post_request(window.location +  "/comments/get")
+    let response = post_request(window.location + "/comments/get")
     return response
 }
 
@@ -107,34 +146,10 @@ function GetCaseComments(projectId, testCaseId) {
     let records = JSON.parse(response).records;
     for (commentIndex in records) {
         let record = records[commentIndex]
-        let element = document.createElement("div")
-        element.className = "list-item"
-        let username = document.createElement("span");
-        let content = document.createElement("span");
-        let id = document.createElement("span");
-        username.innerText = record.fields.Username;
-        id.innerText = record.fields.Id;
-        content.innerText = record.fields.Content;
-
-
-        let deleteButton = document.createElement("button")
-        deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { DeleteCaseComment(id.innerText) }
-
-
-        element.appendChild(username);
-        element.appendChild(id);
-        element.appendChild(content);
-        element.appendChild(deleteButton);
+        let element = CreateCommentElement(record)
         commentsList.appendChild(element);
-
     }
-
 }
-
-
-
-
 
 function AddPlanComment() {
     let comment = document.getElementById("plan-comment-input").value
@@ -146,7 +161,7 @@ function AddPlanComment() {
 }
 
 function DeletePlanComment(id) {
-    let response = post_request(window.location +  "/comments/delete/" + id)
+    let response = post_request(window.location + "/comments/delete/" + id)
     GetPlanComments()
 }
 
@@ -163,37 +178,10 @@ function GetPlanComments() {
     let records = JSON.parse(response).records;
     for (commentIndex in records) {
         let record = records[commentIndex]
-        let element = document.createElement("div")
-        element.className = "list-item"
-        let username = document.createElement("span");
-        let content = document.createElement("span");
-        let id = document.createElement("span");
-        username.innerText = record.fields.Username;
-        id.innerText = record.fields.Id;
-        content.innerText = record.fields.Content;
-
-
-        let deleteButton = document.createElement("button")
-        deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { DeletePlanComment(id.innerText) }
-
-
-        element.appendChild(username);
-        element.appendChild(id);
-        element.appendChild(content);
-        element.appendChild(deleteButton);
+        let element = CreateCommentElement(record)
         commentsList.appendChild(element);
-
     }
-
 }
-
-
-
-
-
-
-
 
 function GetProjects() {
     let projectsList = document.getElementById("projects");

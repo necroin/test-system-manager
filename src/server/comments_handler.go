@@ -70,7 +70,7 @@ func (server *Server) ProjectCommentsInsertHandler(responseWriter http.ResponseW
 		responseWriter.Write([]byte(err.Error()))
 		return
 	}
-	logger.Debug("123", projectId, objectId, objectType)
+
 	response := server.db.InsertRequest(&dbi.Request{
 		Table: "TSM_Comments",
 		Fields: []dbi.Field{
