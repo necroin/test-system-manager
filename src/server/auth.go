@@ -8,6 +8,8 @@ import (
 	"text/template"
 	"tsm/src/db/dbi"
 	"tsm/src/settings"
+
+	"github.com/gorilla/mux"
 )
 
 func (server *Server) AuthHandler(responseWriter http.ResponseWriter, request *http.Request) {
@@ -117,4 +119,14 @@ func (server *Server) AuthTokenHandler(responseWriter http.ResponseWriter, reque
 
 	token := response.Records[0].Fields["Token"]
 	responseWriter.Write([]byte(token))
+}
+
+func (server *Server) GetProjectUserRoleHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	token := params["token"]
+	projectId := params["id"]
+
+	username := server.FindUsernameByToken(token)
+	role := server.FindUserProjectRole(username, projectId)
+	responseWriter.Write([]byte(role))
 }

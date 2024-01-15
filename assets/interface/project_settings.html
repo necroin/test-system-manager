@@ -60,7 +60,7 @@
     <div class="main-area">
         <div id="headline">{{.ProjectName}}</div>
         <div id="settings" class="list">
-            <div class="settings-item">
+            <div id="settings-project-rename" class="settings-item">
                 <span class="settings-item-headline">Имя проекта</span>
                 <div>
                     <input type="text" id="settings-name-input" value="{{.ProjectName}}">
@@ -71,7 +71,7 @@
                 <span class="settings-item-headline">Участники</span>
                 <div>
                     <input type="text" id="settings-collaborators-input">
-                    <button onclick="window.AddProjectUser('{{.ProjectId}}')">Добавить</button>
+                    <button id="settings-collaborators-add-button" onclick="window.AddProjectUser('{{.ProjectId}}')">Добавить</button>
 
                 </div>
                 <div id="collaborators" class="with-text-placeholder tags-list"></div>
@@ -81,7 +81,7 @@
                 <span class="settings-item-headline">Тэги</span>
                 <div>
                     <input type="text" id="settings-tags-input">
-                    <button onclick="window.AddProjectTag('{{.ProjectId}}')">Добавить</button>
+                    <button id="settings-tags-input-add-button" onclick="window.AddProjectTag('{{.ProjectId}}')">Добавить</button>
                 </div>
                 <div id="tags" class="with-text-placeholder tags-list"></div>
                 <span class="text-placeholder settings-item-content">Нет тэгов</span>

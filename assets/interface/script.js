@@ -238,10 +238,20 @@ function AddProjectUser(projectId) {
     location.reload()
 }
 
-function DeleteProjectUser(projectId) {
-    let user = document.getElementById("settings-collaborators-input").value
+function DeleteProjectUser(projectId, user) {
     let response = post_request(window.request_url + "/project/" + projectId + "/collaborators/delete", user)
     location.reload()
+}
+
+function UpdateProjectUser(projectId, user, role) {
+    let response = post_request(
+        window.request_url + "/project/" + projectId + "/collaborators/update", 
+        JSON.stringify({
+            "username": user,
+            "role": role
+        })
+    )
+
 }
 
 function AddTestCaseTag() {
@@ -370,6 +380,20 @@ function GetProjectCollaborators(projectId) {
 }
 
 function GetProjectSettings(projectId) {
+    let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
+    console.log(userRole)
+
+    if (userRole != "Создатель") {
+        document.getElementById("settings-collaborators-input").style.display = "none"
+        document.getElementById("settings-collaborators-add-button").style.display = "none"
+        document.getElementById("settings-project-rename").style.display = "none"
+    }
+
+    if (userRole != "Создатель" && userRole != "Аналитик") {
+        document.getElementById("settings-tags-input").style.display = "none"
+        document.getElementById("settings-tags-input-add-button").style.display = "none"
+    }
+
     let tagsList = document.getElementById("tags");
     tagsList.replaceChildren()
     let tags = GetProjectTags(projectId)
@@ -379,18 +403,21 @@ function GetProjectSettings(projectId) {
 
         let tagElement = document.createElement("span")
         tagElement.innerText = tag.fields.Name
-
-        let deleteButton = document.createElement("button")
-        deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { DeleteProjectTag(projectId, tagElement.innerText) }
-
         div.appendChild(tagElement)
-        div.appendChild(deleteButton)
+
+        if (userRole == "Создатель" || userRole == "Аналитик") {
+            let deleteButton = document.createElement("button")
+            deleteButton.innerText = "✖"
+            deleteButton.onclick = () => { DeleteProjectTag(projectId, tagElement.innerText) }
+            div.appendChild(deleteButton)
+        }
+
         tagsList.appendChild(div)
     }
 
     let collaboratorsList = document.getElementById("collaborators")
     collaboratorsList.replaceChildren()
+
     let collaborators = GetProjectCollaborators(projectId).records
     for (index in collaborators) {
         let collaborator = collaborators[index]
@@ -399,36 +426,49 @@ function GetProjectSettings(projectId) {
             let listElement = document.createElement("div")
             let nameElement = document.createElement("span")
             nameElement.innerText = collaborator.fields.Username
-
-            let roleSelect = document.createElement("select")
-
-            let guestOption = document.createElement("option")
-            let analystOption = document.createElement("option")
-            let testerOption = document.createElement("option")
-
-            guestOption.innerText = "Гость"
-            analystOption.innerText = "Аналитик"
-            testerOption.innerText = "Тестировщик"
-
-            roleSelect.appendChild(guestOption)
-            roleSelect.appendChild(analystOption)
-            roleSelect.appendChild(testerOption)
-
             listElement.appendChild(nameElement)
-            listElement.appendChild(roleSelect)
 
+            if (userRole == "Создатель") {
+                let roleSelect = document.createElement("select")
+                roleSelect.onchange = () => {
+                    UpdateProjectUser(projectId, collaborator.fields.Username, roleSelect.options[roleSelect.selectedIndex].innerText)
+                }
 
-            if (collaborator.fields.Role == "Аналитик") {
-                roleSelect.selectedIndex = 1
+                let guestOption = document.createElement("option")
+                let analystOption = document.createElement("option")
+                let testerOption = document.createElement("option")
+
+                guestOption.innerText = "Гость"
+                analystOption.innerText = "Аналитик"
+                testerOption.innerText = "Тестировщик"
+
+                roleSelect.appendChild(guestOption)
+                roleSelect.appendChild(analystOption)
+                roleSelect.appendChild(testerOption)
+
+                listElement.appendChild(roleSelect)
+
+                if (collaborator.fields.Role == "Аналитик") {
+                    roleSelect.selectedIndex = 1
+                }
+
+                if (collaborator.fields.Role == "Тестировщик") {
+                    roleSelect.selectedIndex = 2
+                }
+
+                let deleteButton = document.createElement("button")
+                deleteButton.innerText = "✖"
+                deleteButton.onclick = () => {
+                    DeleteProjectUser(projectId, collaborator.fields.Username)
+                }
+
+                listElement.appendChild(deleteButton)
+            } else {
+                let roleElement = document.createElement("span")
+                roleElement.innerText = collaborator.fields.Role
+                roleElement.style.border = "none"
+                listElement.appendChild(roleElement)
             }
-
-            if (collaborator.fields.Role == "Тестировщик") {
-                roleSelect.selectedIndex = 2
-            }
-
-            let deleteButton = document.createElement("button")
-            deleteButton.innerText = "✖"
-            listElement.appendChild(deleteButton)
 
             collaboratorsList.appendChild(listElement)
         }

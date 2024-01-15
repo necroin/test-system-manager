@@ -14,9 +14,13 @@ const (
 	ServerAuthRegisterEndpoint = "/auth/register"
 	ServerAuthTokenEndpoint    = "/auth/token"
 
-	ServerProjectsEndpoint              = "/{token}/projects"
-	ServerProjectsSelectEndpoint        = "/{token}/projects/get"
-	ServerProjectsInsertEndpoint        = "/{token}/projects/insert"
+	ServerGetUsernameEndpoint        = "/{token}/username"
+	ServerGetProjectUserRoleEndpoint = "/{token}/project/{id:[0-9]+}/user/role"
+
+	ServerProjectsEndpoint       = "/{token}/projects"
+	ServerProjectsSelectEndpoint = "/{token}/projects/get"
+	ServerProjectsInsertEndpoint = "/{token}/projects/insert"
+
 	ServerProjectCommentsSelectEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/get"
 	ServerProjectCommentsInsertEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/insert"
 	ServerProjectCommentsDeleteEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/delete/{id:[0-9]+}"
@@ -32,6 +36,7 @@ const (
 	ServerProjectCollaboratorsEndpoint       = "/{token}/project/{id:[0-9]+}/collaborators"
 	ServerProjectCollaboratorsAddEndpoint    = "/{token}/project/{id:[0-9]+}/collaborators/add"
 	ServerProjectCollaboratorsDeleteEndpoint = "/{token}/project/{id:[0-9]+}/collaborators/delete"
+	ServerProjectCollaboratorsUpdateEndpoint = "/{token}/project/{id:[0-9]+}/collaborators/update"
 
 	ServerProjectCasesEndpoint       = "/{token}/project/{id:[0-9]+}/cases"
 	ServerProjectCasesSelectEndpoint = "/{token}/project/{id:[0-9]+}/cases/get"

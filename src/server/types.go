@@ -35,3 +35,8 @@ type TestPlanDescriptor struct {
 	Description *string                   `json:"description,omitempty"`
 	TestCases   []TestPlanDescriptorCases `json:"cases,omitempty"`
 }
+
+type ProjectUserUpdateRequest struct {
+	Username string `json:"username"`
+	Role     string `json:"role"`
+}

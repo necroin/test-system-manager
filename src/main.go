@@ -74,6 +74,7 @@ func main() {
 	server.AddHandler(settings.ServerProjectCollaboratorsEndpoint, server.ProjectCollaboratorsHandler, "POST", "GET")
 	server.AddHandler(settings.ServerProjectCollaboratorsAddEndpoint, server.ProjectCollaboratorsAddHandler, "POST", "GET")
 	server.AddHandler(settings.ServerProjectCollaboratorsDeleteEndpoint, server.ProjectCollaboratorsDeleteHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectCollaboratorsUpdateEndpoint, server.ProjectCollaboratorsUpdateHandler, "POST", "GET")
 
 	server.AddHandler(settings.ServerProjectStatisticsEndpoint, server.ProjectStatisticsHandler, "GET")
 	server.AddHandler(settings.ServerProjectStatisticsSelectEndpoint, server.ProjectStatisticsSelectHandler, "POST", "GET")
@@ -86,6 +87,8 @@ func main() {
 	server.AddHandler(settings.ServerProjectPlanSelectEndpoint, server.ProjectPlanSelectHandler, "POST", "GET")
 	server.AddHandler(settings.ServerProjectPlanUpdateEndpoint, server.ProjectPlanUpdateHandler, "POST", "GET")
 	server.AddHandler(settings.ServerProjectPlanCaseAppendEndpoint, server.ProjectPlanCaseAppendHandler, "POST", "GET")
+
+	server.AddHandler(settings.ServerGetProjectUserRoleEndpoint, server.GetProjectUserRoleHandler, "POST", "GET")
 
 	go func() {
 		wg.Add(1)
