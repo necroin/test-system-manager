@@ -83,19 +83,19 @@ function GetProjectTags(projectId) {
 function AddCaseComment(projectId, testCaseId) {
     let comment = document.getElementById("case-comment-input").value
     if (comment != "") {
-        let response = post_request(window.request_url + "/project/" + projectId + "/case/" + testCaseId + "/comments/insert", comment)
-        GetCaseComments(projectId, testCaseId)
+        let response = post_request(window.location +  "/comments/insert", comment)
+        GetCaseComments()
     }
     window.location.reload()
 }
 
-function DeleteCaseComment(projectId, testCaseId, id) {
-    let response = post_request(window.request_url + "/project/" + projectId + "/case/" + testCaseId + "/comments/delete/" + id)
-    GetCaseComments(projectId, testCaseId)
+function DeleteCaseComment(id) {
+    let response = post_request(window.location +  "/comments/delete/" + id)
+    GetCaseComments()
 }
 
-function GetCaseComment(projectId, testCaseId) {
-    let response = post_request(window.request_url + "/project/" + projectId + "/case/" + testCaseId + "/comments/get")
+function GetCaseComment() {
+    let response = post_request(window.location +  "/comments/get")
     return response
 }
 
@@ -103,7 +103,7 @@ function GetCaseComments(projectId, testCaseId) {
     let commentsList = document.getElementById("case-comments-list");
     commentsList.replaceChildren()
 
-    let response = GetCaseComment(projectId, testCaseId)
+    let response = GetCaseComment()
     let records = JSON.parse(response).records;
     for (commentIndex in records) {
         let record = records[commentIndex]
@@ -119,7 +119,7 @@ function GetCaseComments(projectId, testCaseId) {
 
         let deleteButton = document.createElement("button")
         deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { DeleteCaseComment(projectId, testCaseId, id.innerText) }
+        deleteButton.onclick = () => { DeleteCaseComment(id.innerText) }
 
 
         element.appendChild(username);
@@ -136,30 +136,30 @@ function GetCaseComments(projectId, testCaseId) {
 
 
 
-function AddPlanComment(projectId, testPlanId) {
+function AddPlanComment() {
     let comment = document.getElementById("plan-comment-input").value
     if (comment != "") {
-        let response = post_request(window.request_url + "/project/" + projectId + "/plan/" + testPlanId + "/comments/insert", comment)
-        GetPlanComments(projectId, testPlanId)
+        let response = post_request(window.location + "/comments/insert", comment)
+        GetPlanComments()
     }
     window.location.reload()
 }
 
-function DeletePlanComment(projectId, testPlanId, id) {
-    let response = post_request(window.request_url + "/project/" + projectId + "/plan/" + testPlanId + "/comments/delete/" + id)
-    GetPlanComments(projectId, testPlanId)
+function DeletePlanComment(id) {
+    let response = post_request(window.location +  "/comments/delete/" + id)
+    GetPlanComments()
 }
 
-function GetPlanComment(projectId, testPlanId) {
-    let response = post_request(window.request_url + "/project/" + projectId + "/plan/" + testPlanId + "/comments/get")
+function GetPlanComment() {
+    let response = post_request(window.location + "/comments/get")
     return response
 }
 
-function GetPlanComments(projectId, testPlanId) {
+function GetPlanComments() {
     let commentsList = document.getElementById("plan-comments-list");
     commentsList.replaceChildren()
 
-    let response = GetPlanComment(projectId, testPlanId)
+    let response = GetPlanComment()
     let records = JSON.parse(response).records;
     for (commentIndex in records) {
         let record = records[commentIndex]
@@ -175,7 +175,7 @@ function GetPlanComments(projectId, testPlanId) {
 
         let deleteButton = document.createElement("button")
         deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { DeleteCaseComment(projectId, testCaseId, id.innerText) }
+        deleteButton.onclick = () => { DeletePlanComment(id.innerText) }
 
 
         element.appendChild(username);
@@ -507,34 +507,8 @@ function GetTestCase() {
     }
 
     UpdateTestCaseTags()
+    GetCaseComments()
 
-    let commentsList = document.getElementById("case-comments-list");
-    commentsList.replaceChildren()
-    let comments = post_request(window.location.href + "/comments/get");
-    let records = JSON.parse(comments).records;
-    for (commentIndex in records) {
-        let record = records[commentIndex]
-        let element = document.createElement("div")
-        element.className = "list-item"
-        let username = document.createElement("span");
-        let id = document.createElement("span");
-        let content = document.createElement("span");
-        username.innerText = record.fields.Username;
-        id.innerText = record.fields.Id;
-        content.innerText = record.fields.Content;
-
-        let deleteButton = document.createElement("button")
-        deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { post_request(window.location.href + "/comments/delete/" + id.innerText), window.location.reload() }
-
-
-        element.appendChild(username);
-        element.appendChild(id);
-        element.appendChild(content);
-        element.appendChild(deleteButton);
-        commentsList.appendChild(element);
-
-    }
 }
 
 function UpdateTestPlatTestCasesList(testCasesList) {
@@ -637,33 +611,8 @@ function GetTestPlan(projectId) {
     }
 
     UpdateTestPlanTags();
-    let commentsList = document.getElementById("plan-comments-list");
-    commentsList.replaceChildren()
-    let comments = post_request(window.location.href + "/comments/get");
-    let comment = JSON.parse(comments).records;
-    for (commentIndex in comment) {
-        let record = comment[commentIndex]
-        let elements = document.createElement("div")
-        elements.className = "list-item"
-        let username = document.createElement("span");
-        let id = document.createElement("span");
-        let content = document.createElement("span");
-        username.innerText = record.fields.Username;
-        id.innerText = record.fields.Id;
-        content.innerText = record.fields.Content;
+    GetPlanComments();
 
-        let deleteButton = document.createElement("button")
-        deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { post_request(window.location.href + "/comments/delete/" + id.innerText), window.location.reload() }
-
-
-        elements.appendChild(username);
-        elements.appendChild(id);
-        elements.appendChild(content);
-        elements.appendChild(deleteButton);
-        commentsList.appendChild(elements);
-
-    }
 }
 
 function Edit(editButton, textElementId, textAreaElementId, fieldName) {
