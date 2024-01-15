@@ -151,7 +151,15 @@ function GetCaseComments(projectId, testCaseId) {
     }
 }
 
-function AddPlanComment() {
+function AddPlanComment(projectId) {
+
+    let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
+    console.log(userRole)
+
+    if (userRole != "Создатель" && userRole != "Аналитик" && userRole!="Тестировщик") {
+        document.getElementById("plan-comment-input").style.display = "none"
+    }
+
     let comment = document.getElementById("plan-comment-input").value
     if (comment != "") {
         let response = post_request(window.location + "/comments/insert", comment)
@@ -330,17 +338,17 @@ function GetTestCaseTags() {
 }
 
 
-function AddTestPlanTag() {
+function AddTestPlanTag(projectId) {
     let tag = document.getElementById("settings-tags-input").value
     if (tag != "") {
         let response = post_request(window.location + "/tags/insert", tag)
-        UpdateTestPlanTags()
+        UpdateTestPlanTags(projectId)
     }
 }
 
-function DeleteTestPlanTag(tag) {
+function DeleteTestPlanTag(tag,projectId) {
     let response = post_request(window.location + "/tags/delete", tag)
-    UpdateTestPlanTags()
+    UpdateTestPlanTags(projectId)
 }
 
 function GetTestPlanTags() {
@@ -393,6 +401,12 @@ function GetTestCases(projectId) {
 }
 
 function GetTestPlans(projectId) {
+    let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
+    console.log(userRole)
+
+    if (userRole != "Создатель" && userRole != "Аналитик") {
+        document.getElementById("add_test_plan").style.display = "none"
+    }
     let testCasesList = document.getElementById("test-plans");
     testCasesList.replaceChildren();
     let response = post_request(window.request_url + "/project/" + projectId + "/plans/get",
@@ -560,26 +574,32 @@ function UpdateTestCaseTags(projectId) {
     }
 }
 
-function UpdateTestPlanTags() {
+function UpdateTestPlanTags(projectId) {
+    let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
+    console.log(userRole)
+
     let tagsList = document.getElementById("tags");
     tagsList.replaceChildren()
     let tags = GetTestPlanTags()
+    
+        for (tagIndex in tags) {
+            let tag = tags[tagIndex]
+            let div = document.createElement("div")
 
-    for (tagIndex in tags) {
-        let tag = tags[tagIndex]
-        let div = document.createElement("div")
+            let tagElement = document.createElement("span")
+            tagElement.innerText = tag.fields.Name
 
-        let tagElement = document.createElement("span")
-        tagElement.innerText = tag.fields.Name
+            let deleteButton = document.createElement("button")
+            deleteButton.innerText = "✖"
+            deleteButton.onclick = () => { DeleteTestPlanTag(tagElement.innerText,projectId) }
 
-        let deleteButton = document.createElement("button")
-        deleteButton.innerText = "✖"
-        deleteButton.onclick = () => { DeleteTestPlanTag(tagElement.innerText) }
-
-        div.appendChild(tagElement)
-        div.appendChild(deleteButton)
-        tagsList.appendChild(div)
-    }
+            div.appendChild(tagElement)
+            if (userRole == "Создатель" || userRole == "Аналитик") {
+            div.appendChild(deleteButton)
+        }
+            tagsList.appendChild(div)
+       
+    }   
 }
 
 function GetTestCase(projectId) {
@@ -622,6 +642,15 @@ function UpdateTestPlatTestCasesList(testCasesList) {
 }
 
 function GetTestPlan(projectId) {
+    let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
+    console.log(userRole)
+
+    if (userRole != "Создатель" && userRole != "Аналитик") {
+        document.getElementById("tag-adder").style.display = "none"
+        document.getElementById("edit_plan_describe").style.display = "none"
+        document.getElementById("add_test_case").style.display = "none"
+    }
+
     let testCasesList = document.getElementById("test-cases");
     testCasesList.replaceChildren();
 
@@ -657,7 +686,9 @@ function GetTestPlan(projectId) {
         element.appendChild(id);
         element.appendChild(name);
         element.appendChild(spacer);
-        element.appendChild(deleteButton);
+        if (userRole == "Создатель" || userRole == "Аналитик") {
+            element.appendChild(deleteButton);
+        }
 
         let testCaseId = id.innerText;
         element.onclick = () => OpenPage("/project/" + projectId + "/case/" + testCaseId);
@@ -710,7 +741,7 @@ function GetTestPlan(projectId) {
         appendCaseSelect.appendChild(appendCaseOption)
     }
 
-    UpdateTestPlanTags();
+    UpdateTestPlanTags(projectId);
     GetPlanComments();
 
 }
