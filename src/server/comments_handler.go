@@ -63,7 +63,7 @@ func (server *Server) ProjectCommentsInsertHandler(responseWriter http.ResponseW
 	projectId := params["projid"]
 	objectId := params["objId"]
 	objectType := params["type"]
-
+	token := params["token"]
 	content, err := io.ReadAll(request.Body)
 	if err != nil {
 		logger.Error("%s", err)
@@ -96,7 +96,7 @@ func (server *Server) ProjectCommentsInsertHandler(responseWriter http.ResponseW
 			},
 			{
 				Name:  "Username",
-				Value: "'Username'",
+				Value: fmt.Sprintf("'%s'", server.FindUsernameByToken(token)),
 			},
 		},
 		Filters: []dbi.Filter{},
@@ -114,7 +114,7 @@ func (server *Server) ProjectCommentsDeleteHandler(responseWriter http.ResponseW
 	projectId := params["projid"]
 	objectId := params["objId"]
 	objectType := params["type"]
-
+	token := params["token"]
 	response := server.db.DeleteRequest(&dbi.Request{
 		Table: "TSM_Comments",
 		Filters: []dbi.Filter{
@@ -137,6 +137,11 @@ func (server *Server) ProjectCommentsDeleteHandler(responseWriter http.ResponseW
 				Name:     "Id",
 				Operator: "=",
 				Value:    fmt.Sprintf("'%s'", id),
+			},
+			{
+				Name:     "Username",
+				Operator: "=",
+				Value:    fmt.Sprintf("'%s'", server.FindUsernameByToken(token)),
 			},
 		},
 	})
