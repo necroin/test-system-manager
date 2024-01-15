@@ -8,7 +8,7 @@
     <title>TSM</title>
 </head>
 
-<body onload="window.GetTestCase()">
+<body onload="window.GetTestCase('{{.ProjectId}}')">
     <div id="menu_bar">
         <button class="menu_bar_button" onclick="window.OpenPage('/projects')">
             <!-- Home -->
@@ -57,7 +57,7 @@
                 <div class="test-page-element">
                     <div class="edit-header">
                         <span class="edit-header-text">Описание</span>
-                        <button onclick="window.Edit(this, 'description-text', 'description-text-area', 'description')">
+                        <button id="case-description-edit-button" onclick="window.Edit(this, 'description-text', 'description-text-area', 'description')">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
                                 <title>Edit</title>
                                 <path
@@ -75,7 +75,7 @@
                 <div class="test-page-element">
                     <div class="edit-header">
                         <span class="edit-header-text">Сценарий</span>
-                        <button onclick="window.Edit(this, 'scenario-text', 'scenario-text-area', 'scenario')">
+                        <button id="case-scenario-edit-button" onclick="window.Edit(this, 'scenario-text', 'scenario-text-area', 'scenario')">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
                                 <title>Edit</title>
                                 <path
