@@ -156,7 +156,7 @@ function AddPlanComment(projectId) {
     let userRole = post_request(window.request_url + "/project/" + projectId + "/user/role")
     console.log(userRole)
 
-    if (userRole != "Создатель" && userRole != "Аналитик" && userRole!="Тестировщик") {
+    if (userRole != "Создатель" && userRole != "Аналитик" && userRole != "Тестировщик") {
         document.getElementById("plan-comment-input").style.display = "none"
     }
 
@@ -322,13 +322,13 @@ function AddTestCaseTag() {
     let tag = document.getElementById("settings-tags-input").value
     if (tag != "") {
         let response = post_request(window.location + "/tags/insert", tag)
-        UpdateTestCaseTags()
+        location.reload()
     }
 }
 
 function DeleteTestCaseTag(tag) {
     let response = post_request(window.location + "/tags/delete", tag)
-    UpdateTestCaseTags()
+    location.reload()
 }
 
 function GetTestCaseTags() {
@@ -338,17 +338,17 @@ function GetTestCaseTags() {
 }
 
 
-function AddTestPlanTag(projectId) {
+function AddTestPlanTag() {
     let tag = document.getElementById("settings-tags-input").value
     if (tag != "") {
         let response = post_request(window.location + "/tags/insert", tag)
-        UpdateTestPlanTags(projectId)
+        location.reload()
     }
 }
 
-function DeleteTestPlanTag(tag,projectId) {
+function DeleteTestPlanTag(tag) {
     let response = post_request(window.location + "/tags/delete", tag)
-    UpdateTestPlanTags(projectId)
+    location.reload()
 }
 
 function GetTestPlanTags() {
@@ -364,8 +364,8 @@ function GetTestCases(projectId) {
     let response = post_request(window.request_url + "/project/" + projectId + "/cases/get",
         JSON.stringify({ "search": GetSearchLineText() }));
     if (userRole != "Создатель" && userRole != "Аналитик") {
-            document.getElementById("add-case-button").style.display = "none"
-        }
+        document.getElementById("add-case-button").style.display = "none"
+    }
     let records = JSON.parse(response).records;
     for (recordIndex in records) {
         let record = records[recordIndex]
@@ -581,25 +581,25 @@ function UpdateTestPlanTags(projectId) {
     let tagsList = document.getElementById("tags");
     tagsList.replaceChildren()
     let tags = GetTestPlanTags()
-    
-        for (tagIndex in tags) {
-            let tag = tags[tagIndex]
-            let div = document.createElement("div")
 
-            let tagElement = document.createElement("span")
-            tagElement.innerText = tag.fields.Name
+    for (tagIndex in tags) {
+        let tag = tags[tagIndex]
+        let div = document.createElement("div")
 
-            let deleteButton = document.createElement("button")
-            deleteButton.innerText = "✖"
-            deleteButton.onclick = () => { DeleteTestPlanTag(tagElement.innerText,projectId) }
+        let tagElement = document.createElement("span")
+        tagElement.innerText = tag.fields.Name
 
-            div.appendChild(tagElement)
-            if (userRole == "Создатель" || userRole == "Аналитик") {
+        let deleteButton = document.createElement("button")
+        deleteButton.innerText = "✖"
+        deleteButton.onclick = () => { DeleteTestPlanTag(tagElement.innerText, projectId) }
+
+        div.appendChild(tagElement)
+        if (userRole == "Создатель" || userRole == "Аналитик") {
             div.appendChild(deleteButton)
         }
-            tagsList.appendChild(div)
-       
-    }   
+        tagsList.appendChild(div)
+
+    }
 }
 
 function GetTestCase(projectId) {
@@ -666,7 +666,6 @@ function GetTestPlan(projectId) {
     for (recordIndex in records) {
         let element = document.createElement("div");
         element.className = "list-item"
-        element.draggable = true
         let id = document.createElement("span");
         let name = document.createElement("span");
         let spacer = document.createElement("div")
@@ -693,36 +692,42 @@ function GetTestPlan(projectId) {
         let testCaseId = id.innerText;
         element.onclick = () => OpenPage("/project/" + projectId + "/case/" + testCaseId);
 
-        element.addEventListener("dragstart", () => {
-            setTimeout(() => { element.classList.add("dragging") }, 0);
-        });
+        if (userRole == "Создатель" || userRole == "Аналитик") {
+            element.draggable = true
 
-        element.addEventListener("dragend", () => {
-            element.classList.remove("dragging")
+            element.addEventListener("dragstart", () => {
+                setTimeout(() => { element.classList.add("dragging") }, 0);
+            });
 
-            let data = { "cases": [] }
-            for (i = 0; i < testCasesList.children.length; i++) {
-                let testCase = testCasesList.children.item(i)
-                let id = testCase.children.item(0).innerText
-                data["cases"].push({ "id": id })
-            }
-            let response = post_request(window.location.href + "/update", JSON.stringify(data));
-        });
+            element.addEventListener("dragend", () => {
+                element.classList.remove("dragging")
+
+                let data = { "cases": [] }
+                for (i = 0; i < testCasesList.children.length; i++) {
+                    let testCase = testCasesList.children.item(i)
+                    let id = testCase.children.item(0).innerText
+                    data["cases"].push({ "id": id })
+                }
+                let response = post_request(window.location.href + "/update", JSON.stringify(data));
+            });
+        }
 
         testCasesList.appendChild(element);
     }
 
-    const initSortableList = (event) => {
-        event.preventDefault();
-        const draggingItem = document.querySelector(".dragging");
-        let siblings = [...testCasesList.querySelectorAll(".list-item:not(.dragging)")];
-        let nextSibling = siblings.find(sibling => {
-            return event.clientY + window.scrollY < sibling.offsetTop + sibling.offsetHeight / 2;
-        });
-        testCasesList.insertBefore(draggingItem, nextSibling);
+    if (userRole == "Создатель" || userRole == "Аналитик") {
+        const initSortableList = (event) => {
+            event.preventDefault();
+            const draggingItem = document.querySelector(".dragging");
+            let siblings = [...testCasesList.querySelectorAll(".list-item:not(.dragging)")];
+            let nextSibling = siblings.find(sibling => {
+                return event.clientY + window.scrollY < sibling.offsetTop + sibling.offsetHeight / 2;
+            });
+            testCasesList.insertBefore(draggingItem, nextSibling);
+        }
+        testCasesList.addEventListener("dragover", initSortableList);
+        testCasesList.addEventListener("dragenter", event => event.preventDefault());
     }
-    testCasesList.addEventListener("dragover", initSortableList);
-    testCasesList.addEventListener("dragenter", event => event.preventDefault());
 
     let appendCaseSelect = document.getElementById("append-case-select")
 

@@ -159,6 +159,10 @@ func (server *Server) ProjectsSelectHandler(responseWriter http.ResponseWriter, 
 }
 
 func (server *Server) ProjectsInsertHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	token := params["token"]
+	username := server.FindUsernameByToken(token)
+
 	projectName, err := io.ReadAll(request.Body)
 	if err != nil {
 		logger.Error("%s", err)
@@ -183,6 +187,30 @@ func (server *Server) ProjectsInsertHandler(responseWriter http.ResponseWriter, 
 	if projectsResponse.Error != nil {
 		logger.Error("%s", projectsResponse.Error)
 		json.NewEncoder(responseWriter).Encode(projectsResponse)
+		return
+	}
+
+	projectUserResponse := server.db.InsertRequest(&dbi.Request{
+		Table: "TSM_ProjectUsers",
+		Fields: []dbi.Field{
+			{
+				Name:  "Username",
+				Value: fmt.Sprintf("'%s'", username),
+			},
+			{
+				Name:  "ProjectId",
+				Value: "(select MAX(Id) from Projects)",
+			},
+			{
+				Name:  "Role",
+				Value: fmt.Sprintf("'%s'", settings.ProjectRoleCreator),
+			},
+		},
+	})
+
+	if projectUserResponse.Error != nil {
+		logger.Error("%s", projectUserResponse.Error)
+		json.NewEncoder(responseWriter).Encode(projectUserResponse)
 		return
 	}
 }
