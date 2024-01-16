@@ -23,6 +23,9 @@ func (server *Server) ProjectSettingsHandler(responseWriter http.ResponseWriter,
 			{
 				Name: "Name",
 			},
+			{
+				Name: "Archived",
+			},
 		},
 		Filters: []dbi.Filter{
 			{
@@ -38,9 +41,16 @@ func (server *Server) ProjectSettingsHandler(responseWriter http.ResponseWriter,
 		return
 	}
 
+	isArchived := projectsResponse.Records[0].Fields["Archived"]
+
+	archived := "В архив"
+	if isArchived == "true" {
+		archived = "Из архива"
+	}
 	PageDescriptor := PageDescriptor{
 		ProjectId:   projectId,
 		ProjectName: projectsResponse.Records[0].Fields["Name"],
+		Archived:    archived,
 	}
 	server.PageHandler(responseWriter, settings.InterfaceProjectSettingsHTML, PageDescriptor, token)
 }

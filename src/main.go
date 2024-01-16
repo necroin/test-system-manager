@@ -94,6 +94,10 @@ func main() {
 	server.AddHandler(settings.ServerProjectPlanRunGetEndpoint, server.ProjectPlanRunSelectHandler, "POST", "GET")
 	server.AddHandler(settings.ServerProjectPlanRunInsertEndpoint, server.ProjectPlanRunInsertHandler, "POST", "GET")
 
+	server.AddHandler(settings.ServerProjectDeleteEndpoint, server.ProjectsDeleteHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectCaseDeleteEndpoint, server.ProjectCasesDeleteHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectPlanDeleteEndpoint, server.ProjectPlansDeleteHandler, "POST", "GET")
+
 	go func() {
 		wg.Add(1)
 		defer wg.Done()

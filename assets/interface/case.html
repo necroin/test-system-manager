@@ -95,6 +95,9 @@
                     <button type="submit" onclick="window.AddCaseComment('{{.ProjectId}}', '{{.TestCaseId}}') ">Комментировать</button>
                     <div id="case-comments-list" class="list"></div>
                 </div>
+                <div class="test-page-element">
+                    <button onclick="DeleteTestCase('{{.ProjectId}}')">Удалить</button>
+                </div>
             </div>
             <div class="test-page-element tags">
                 <div class="edit-header">

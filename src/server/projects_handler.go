@@ -218,3 +218,144 @@ func (server *Server) ProjectsInsertHandler(responseWriter http.ResponseWriter, 
 		return
 	}
 }
+
+func (server *Server) ProjectsDeleteHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	projectId := params["id"]
+
+	response := server.db.DeleteRequest(&dbi.Request{
+		Table: "Projects",
+		Filters: []dbi.Filter{
+			{
+				Name:     "Id",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_TestCase",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_TestPlan",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_TestPlanTestCase",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_Stat",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_Tags",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ObjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_Tags",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ObjectId",
+				Operator: "like",
+				Value:    fmt.Sprintf("'%s;%%'", projectId),
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_Comments",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+}

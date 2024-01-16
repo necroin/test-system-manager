@@ -16,6 +16,7 @@ type PageDescriptor struct {
 	TestPlanId   string
 	TestPlanName string
 	TestRunId    string
+	Archived     string
 }
 
 type SearchRequest struct {
@@ -43,7 +44,7 @@ type TestRunDescriptorCases struct {
 type TestPlanDescriptor struct {
 	Description *string                   `json:"description,omitempty"`
 	TestCases   []TestPlanDescriptorCases `json:"cases,omitempty"`
-	TestRuns    []TestRunDescriptorCases   `json:"runs,omitempty"`
+	TestRuns    []TestRunDescriptorCases  `json:"runs,omitempty"`
 }
 
 type ProjectUserUpdateRequest struct {
@@ -74,8 +75,6 @@ type TestCaseStatDescriptor struct {
 type TestPlanStatDescriptor struct {
 	TestCases []TestCaseStatDescriptor `json:"cases,omitempty"`
 }
-
-
 
 // type StatCaseDescriptor struct {
 // 	TestCaseId string `json:"case_id"`

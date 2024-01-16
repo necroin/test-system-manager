@@ -464,6 +464,7 @@ function GetProjectSettings(projectId) {
         document.getElementById("settings-collaborators-input").style.display = "none"
         document.getElementById("settings-collaborators-add-button").style.display = "none"
         document.getElementById("settings-project-rename").style.display = "none"
+        document.getElementById("settings-project-archive").style.display = "none"
     }
 
     if (userRole != "Создатель" && userRole != "Аналитик") {
@@ -549,6 +550,12 @@ function GetProjectSettings(projectId) {
 
             collaboratorsList.appendChild(listElement)
         }
+    }
+
+    deleteButton = document.getElementById("settings-project-delete-button")
+    deleteButton.onclick = () => {
+        DeleteProject(projectId)
+        window.location.href = "http://" + window.request_url + "/projects"
     }
 }
 
@@ -969,4 +976,18 @@ function EndTestPlan(projectId, testPlanId, runId) {
     console.log(JSON.stringify(data))
     let response = post_request(window.location.href + "/insert", JSON.stringify(data));
     window.location.href = "http://" + window.request_url + "/project/" + projectId + "/plan/" + testPlanId
+}
+
+function DeleteProject(projectId) {
+    post_request(window.request_url + "/project/" + projectId + "/delete")
+}
+
+function DeleteTestCase(projectId) {
+    post_request(window.location.href + "/delete")
+    window.location.href = "http://" + window.request_url + "/project/" + projectId + "/cases"
+}
+
+function DeleteTestPlan(projectId) {
+    post_request(window.location.href + "/delete")
+    window.location.href = "http://" + window.request_url + "/project/" + projectId + "/plans"
 }

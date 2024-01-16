@@ -194,3 +194,102 @@ func (server *Server) ProjectCasesInsertHandler(responseWriter http.ResponseWrit
 		return
 	}
 }
+
+func (server *Server) ProjectCasesDeleteHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	params := mux.Vars(request)
+	projectId := params["id"]
+	testCaseId := params["caseId"]
+
+	response := server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_TestCase",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+			{
+				Name:     "Id",
+				Operator: "=",
+				Value:    testCaseId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_TestPlanTestCase",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+			{
+				Name:     "TestCaseId",
+				Operator: "=",
+				Value:    testCaseId,
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_Tags",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ObjectId",
+				Operator: "=",
+				Value:    fmt.Sprintf("'%s;%s'", projectId, testCaseId),
+			},
+			{
+				Name:     "ObjectType",
+				Operator: "=",
+				Value:    fmt.Sprintf("'%s'", settings.ObjectTypeTestCase),
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+
+	response = server.db.DeleteRequest(&dbi.Request{
+		Table: "TSM_Comments",
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+			{
+				Name:     "ObjectId",
+				Operator: "=",
+				Value:    testCaseId,
+			},
+			{
+				Name:     "ObjectType",
+				Operator: "=",
+				Value:    fmt.Sprintf("'case'"),
+			},
+		},
+	})
+
+	if response.Error != nil {
+		logger.Error(response.Error.Error())
+		responseWriter.Write([]byte(response.Error.Error()))
+		return
+	}
+}

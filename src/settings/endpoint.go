@@ -20,7 +20,6 @@ const (
 	ServerProjectsEndpoint       = "/{token}/projects"
 	ServerProjectsSelectEndpoint = "/{token}/projects/get"
 	ServerProjectsInsertEndpoint = "/{token}/projects/insert"
-	ServerProjectsDeleteEndpoint = "/{token}/projects/delete"
 
 	ServerProjectCommentsSelectEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/get"
 	ServerProjectCommentsInsertEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/insert"
@@ -33,6 +32,7 @@ const (
 	ServerProjectStatisticsSelectEndpoint = "/{token}/project/{id:[0-9]+}/statistics/get"
 	ServerProjectSettingsEndpoint         = "/{token}/project/{id:[0-9]+}/settings"
 	ServerProjectRenameEndpoint           = "/{token}/project/{id:[0-9]+}/rename"
+	ServerProjectDeleteEndpoint           = "/{token}/project/{id:[0-9]+}/delete"
 
 	ServerProjectCollaboratorsEndpoint       = "/{token}/project/{id:[0-9]+}/collaborators"
 	ServerProjectCollaboratorsAddEndpoint    = "/{token}/project/{id:[0-9]+}/collaborators/add"
@@ -42,10 +42,10 @@ const (
 	ServerProjectCasesEndpoint       = "/{token}/project/{id:[0-9]+}/cases"
 	ServerProjectCasesSelectEndpoint = "/{token}/project/{id:[0-9]+}/cases/get"
 	ServerProjectCasesInsertEndpoint = "/{token}/project/{id:[0-9]+}/cases/insert"
-	ServerProjectCasesDeleteEndpoint = "/{token}/project/{id:[0-9]+}/cases/delete"
 	ServerProjectCaseEndpoint        = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}"
 	ServerProjectCaseSelectEndpoint  = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}/get"
 	ServerProjectCaseUpdateEndpoint  = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}/update"
+	ServerProjectCaseDeleteEndpoint  = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}/delete"
 
 	ServerProjectPlansEndpoint          = "/{token}/project/{id:[0-9]+}/plans"
 	ServerProjectPlansSelectEndpoint    = "/{token}/project/{id:[0-9]+}/plans/get"
@@ -55,6 +55,7 @@ const (
 	ServerProjectPlanSelectEndpoint     = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/get"
 	ServerProjectPlanUpdateEndpoint     = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/update"
 	ServerProjectPlanCaseAppendEndpoint = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/case/append"
+	ServerProjectPlanDeleteEndpoint     = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/delete"
 
 	ServerCaseTagsSelectEndpoint = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}/tags/get"
 	ServerCaseTagsInsertEndpoint = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}/tags/insert"
