@@ -17,6 +17,11 @@ func (server *Server) ProjectCaseHandler(responseWriter http.ResponseWriter, req
 	projectId := params["id"]
 	testCaseId := params["caseId"]
 
+	if server.GetUserProjectRole(token, projectId) < roleAnalisyst {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
+
 	response := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_TestCase",
 		Fields: []dbi.Field{
@@ -55,6 +60,12 @@ func (server *Server) ProjectCaseSelectHandler(responseWriter http.ResponseWrite
 	params := mux.Vars(request)
 	projectId := params["id"]
 	testCaseId := params["caseId"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleAnalisyst {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	response := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_TestCase",
@@ -102,6 +113,13 @@ func (server *Server) ProjectCaseUpdateHandler(responseWriter http.ResponseWrite
 	params := mux.Vars(request)
 	projectId := params["id"]
 	testCaseId := params["caseId"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
+
 	fields := []dbi.Field{}
 
 	data := &TestCaseDescriptor{}
