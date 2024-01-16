@@ -51,6 +51,12 @@ func (server *Server) CaseTagsInsertHandler(responseWriter http.ResponseWriter, 
 	params := mux.Vars(request)
 	projectId := params["id"]
 	caseId := params["caseId"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	tagName, err := io.ReadAll(request.Body)
 	if err != nil {
@@ -88,6 +94,12 @@ func (server *Server) CaseTagsDeleteHandler(responseWriter http.ResponseWriter, 
 	params := mux.Vars(request)
 	projectId := params["id"]
 	caseId := params["caseId"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	tagName, err := io.ReadAll(request.Body)
 	if err != nil {

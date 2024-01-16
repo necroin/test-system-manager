@@ -52,6 +52,12 @@ func (server *Server) PlanTagsInsertHandler(responseWriter http.ResponseWriter, 
 	params := mux.Vars(request)
 	projectId := params["id"]
 	PlanId := params["planId"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	tagName, err := io.ReadAll(request.Body)
 	if err != nil {
@@ -89,6 +95,12 @@ func (server *Server) PlanTagsDeleteHandler(responseWriter http.ResponseWriter, 
 	params := mux.Vars(request)
 	projectId := params["id"]
 	PlanId := params["planId"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	tagName, err := io.ReadAll(request.Body)
 	if err != nil {
