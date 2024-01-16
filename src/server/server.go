@@ -158,3 +158,26 @@ func (server *Server) FindUserProjectRole(username string, projectId string) str
 	role := response.Records[0].Fields["Role"]
 	return role
 }
+
+func (server *Server) GetUserProjectRole(token string, projectId string) int {
+	username := server.FindUsernameByToken(token)
+	role := server.FindUserProjectRole(username, projectId)
+	if role == "Создатель" {
+		return roleCreator
+	}
+
+	if role == "Тестировщик" {
+		return roleTester
+	}
+
+	if role == "Аналитик" {
+		return roleAnalisyst
+	}
+	return 0
+}
+
+var (
+	roleCreator   = 3
+	roleTester    = 2
+	roleAnalisyst = 1
+)

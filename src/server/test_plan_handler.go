@@ -19,6 +19,11 @@ func (server *Server) ProjectPlanHandler(responseWriter http.ResponseWriter, req
 	projectId := params["id"]
 	testPlanId := params["planId"]
 
+	if server.GetUserProjectRole(token, projectId) < roleAnalisyst {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
+
 	response := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_TestPlan",
 		Fields: []dbi.Field{
@@ -57,6 +62,12 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 	params := mux.Vars(request)
 	projectId := params["id"]
 	testPlanId := params["planId"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleAnalisyst {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	projectTestPlanResponse := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_TestPlan",
@@ -175,7 +186,12 @@ func (server *Server) ProjectPlanUpdateHandler(responseWriter http.ResponseWrite
 	params := mux.Vars(request)
 	projectId := params["id"]
 	testPlanId := params["planId"]
+	token := params["token"]
 
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 	data := &TestPlanDescriptor{}
 	json.NewDecoder(request.Body).Decode(data)
 
@@ -268,6 +284,12 @@ func (server *Server) ProjectPlanCaseAppendHandler(responseWriter http.ResponseW
 	params := mux.Vars(request)
 	projectId := params["id"]
 	testPlanId := params["planId"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	data, _ := io.ReadAll(request.Body)
 	caseId := string(data)

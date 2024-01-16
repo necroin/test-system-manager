@@ -17,6 +17,11 @@ func (server *Server) ProjectSettingsHandler(responseWriter http.ResponseWriter,
 	token := params["token"]
 	projectId := params["id"]
 
+	if server.GetUserProjectRole(token, projectId) < roleCreator {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
+
 	projectsResponse := server.db.SelectRequest(&dbi.Request{
 		Table: "Projects",
 		Fields: []dbi.Field{
@@ -47,7 +52,13 @@ func (server *Server) ProjectSettingsHandler(responseWriter http.ResponseWriter,
 
 func (server *Server) ProjectRenameHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
+	token := params["token"]
 	projectId := params["id"]
+
+	if server.GetUserProjectRole(token, projectId) < roleCreator {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	data, _ := io.ReadAll(request.Body)
 	newName := string(data)

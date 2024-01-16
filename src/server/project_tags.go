@@ -48,7 +48,13 @@ func (server *Server) ProjectTagsSelectHandler(responseWriter http.ResponseWrite
 
 func (server *Server) ProjectTagsInsertHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
+	token := params["token"]
 	projectId := params["id"]
+
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	tagName, err := io.ReadAll(request.Body)
 	if err != nil {
@@ -84,7 +90,13 @@ func (server *Server) ProjectTagsInsertHandler(responseWriter http.ResponseWrite
 
 func (server *Server) ProjectTagsDeleteHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
+	token := params["token"]
 	projectId := params["id"]
+
+	if server.GetUserProjectRole(token, projectId) < roleTester {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	tagName, err := io.ReadAll(request.Body)
 	if err != nil {

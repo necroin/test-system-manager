@@ -15,6 +15,11 @@ func (server *Server) ProjectStatisticsHandler(responseWriter http.ResponseWrite
 	token := params["token"]
 	projectId := params["id"]
 
+	if server.GetUserProjectRole(token, projectId) < roleCreator {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
+
 	projectsResponse := server.db.SelectRequest(&dbi.Request{
 		Table: "Projects",
 		Fields: []dbi.Field{
@@ -46,7 +51,13 @@ func (server *Server) ProjectStatisticsHandler(responseWriter http.ResponseWrite
 
 func (server *Server) ProjectStatisticsSelectHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
+	token := params["token"]
 	projectId := params["id"]
+
+	if server.GetUserProjectRole(token, projectId) < roleCreator {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	response := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_Stat",

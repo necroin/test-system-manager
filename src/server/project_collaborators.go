@@ -15,6 +15,12 @@ import (
 func (server *Server) ProjectCollaboratorsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	projectId := params["id"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleCreator {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	response := server.db.SelectRequest(&dbi.Request{
 		Table: "TSM_ProjectUsers",
@@ -47,6 +53,12 @@ func (server *Server) ProjectCollaboratorsHandler(responseWriter http.ResponseWr
 func (server *Server) ProjectCollaboratorsAddHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	projectId := params["id"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleCreator {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	data, _ := io.ReadAll(request.Body)
 	username := string(data)
@@ -73,6 +85,12 @@ func (server *Server) ProjectCollaboratorsAddHandler(responseWriter http.Respons
 func (server *Server) ProjectCollaboratorsDeleteHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	projectId := params["id"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleCreator {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	data, _ := io.ReadAll(request.Body)
 	username := string(data)
@@ -97,6 +115,12 @@ func (server *Server) ProjectCollaboratorsDeleteHandler(responseWriter http.Resp
 func (server *Server) ProjectCollaboratorsUpdateHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	projectId := params["id"]
+	token := params["token"]
+
+	if server.GetUserProjectRole(token, projectId) < roleCreator {
+		responseWriter.Write([]byte("Permission denied"))
+		return
+	}
 
 	updateRequest := &ProjectUserUpdateRequest{}
 	json.NewDecoder(request.Body).Decode(updateRequest)
