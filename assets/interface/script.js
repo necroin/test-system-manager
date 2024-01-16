@@ -278,6 +278,7 @@ function GetStatistics(projectId) {
     for (index in records) {
         let record = records[index]
         let planRunId = [record.fields.TestPlanId, record.fields.TestRunId].join(";")
+
         if (plans[planRunId] == null) {
             plans[planRunId] = { Result: true }
         }
@@ -302,11 +303,13 @@ function GetStatistics(projectId) {
     let casesSuccessDegree = Number(360 * (cases_success_count / (cases_success_count + cases_fail_count)))
     document.getElementById("cases-result-relation").style.backgroundImage = "conic-gradient(rgb(152, 201, 123) " + String(casesSuccessDegree) + "deg, rgb(185, 107, 107) 0)"
 
-    for (let [id, result] in plans) {
+    for (let id in plans) {
+        result = plans[id].Result
         if (result == true) {
             plans_success_count += 1
         } else {
             plans_fail_count += 1
+
         }
     }
 
@@ -651,6 +654,10 @@ function GetTestPlan(projectId) {
         document.getElementById("add_test_case").style.display = "none"
     }
 
+    if (userRole == "Гость") {
+        document.getElementById("test-plan-run").style.display = "none"
+    }
+
     let testCasesList = document.getElementById("test-cases");
     testCasesList.replaceChildren();
 
@@ -730,6 +737,7 @@ function GetTestPlan(projectId) {
     }
 
     let appendCaseSelect = document.getElementById("append-case-select")
+    appendCaseSelect.replaceChildren()
 
     let testCasesResponse = post_request(
         window.request_url + "/project/" + projectId + "/cases/get",
@@ -746,9 +754,83 @@ function GetTestPlan(projectId) {
         appendCaseSelect.appendChild(appendCaseOption)
     }
 
-    UpdateTestPlanTags(projectId);
+    UpdateTestPlanTags();
     GetPlanComments();
 
+
+    runs = data.runs
+    var runIds = []
+
+    for (recordIndex in runs) {
+        if (runIds.indexOf(runs[recordIndex].run_id) == -1) {
+            runIds.push(runs[recordIndex].run_id);
+        }
+    }
+
+    let testRunsTable = document.getElementById("test-runs-table");
+    testRunsTable.replaceChildren();
+    runId = 1;
+    for (runId in runIds) {
+        console.log(1);
+        let run_table = document.createElement("table");
+        //run_table.style = "width:100%";
+        let run_name_tr = document.createElement("tr");
+        let run_name_th = document.createElement("th");
+        run_name_th.innerHTML = "RunId" + runIds[runId];
+        run_name_tr.appendChild(run_name_th);
+        run_table.appendChild(run_name_tr);
+        for (recordIndex in runs) {
+            if (runs[recordIndex].run_id == runIds[runId]) {
+                let case_tr = document.createElement("tr");
+                let case_table = document.createElement("table");
+
+                let case_id_tr = document.createElement("tr");
+                let case_id_name_td = document.createElement("td");
+                let case_id_value_td = document.createElement("td");
+
+                case_id_name_td.innerHTML = "CaseId";
+                case_id_value_td.innerHTML = runs[recordIndex].case_id;
+                case_id_tr.appendChild(case_id_name_td);
+                case_id_tr.appendChild(case_id_value_td);
+                case_table.appendChild(case_id_tr);
+
+                let result_tr = document.createElement("tr");
+                let result_name_td = document.createElement("td");
+                let result_value_td = document.createElement("td");
+
+                result_name_td.innerHTML = "Result";
+                result_value_td.innerHTML = runs[recordIndex].result;
+                result_tr.appendChild(result_name_td);
+                result_tr.appendChild(result_value_td);
+                case_table.appendChild(result_tr);
+
+                let datetime_tr = document.createElement("tr");
+                let datetime_name_td = document.createElement("td");
+                let datetime_value_td = document.createElement("td");
+
+                datetime_name_td.innerHTML = "Step Run Time";
+                datetime_value_td.innerHTML = runs[recordIndex].datetime;
+                datetime_tr.appendChild(datetime_name_td);
+                datetime_tr.appendChild(datetime_value_td);
+                case_table.appendChild(datetime_tr);
+
+                let comment_tr = document.createElement("tr");
+                let comment_name_td = document.createElement("td");
+                let comment_value_td = document.createElement("td");
+
+                comment_name_td.innerHTML = "Step Comment";
+                comment_value_td.innerHTML = runs[recordIndex].comment;
+                comment_tr.appendChild(comment_name_td);
+                comment_tr.appendChild(comment_value_td);
+                case_table.appendChild(comment_tr);
+
+                case_tr.appendChild(case_table);
+                run_table.appendChild(case_tr);
+            }
+            testRunsTable.appendChild(run_table);
+
+        }
+    }
 }
 
 function Edit(editButton, textElementId, textAreaElementId, fieldName) {
@@ -801,4 +883,90 @@ function AppendTestCase(projectId) {
     let data = id
     let response = post_request(window.location.href + "/case/append", id)
     window.close_dialog('append-dialog', 'append-dialog-overlay')
+}
+
+function RunTestPlan() {
+    window.location.href = window.location.href + "/run";
+}
+
+function GetRunTestPlan() {
+    let testCasesList = document.getElementById("test-cases");
+    testCasesList.replaceChildren();
+    let response = post_request(window.location.href + "/get");
+    let data = JSON.parse(response)
+
+    let description = document.getElementById("description-text")
+    if (data.description != null) {
+        description.innerText = data.description
+    }
+    let runId = data.run_id
+
+    console.log(runId)
+    let records = data.cases;
+    //let projectId = window.location.pathname.split('/')[2];
+
+    for (recordIndex in records) {
+        let element = document.createElement("div");
+        element.className = "run-list-item"
+        element.draggable = false
+        let id = document.createElement("span");
+        let name = document.createElement("h3");
+        let scenario_header = document.createElement("h4");
+        let scenario = document.createElement("span");
+        scenario.id = "case-scenario"
+        let case_description_header = document.createElement("h4");
+        let case_description = document.createElement("span");
+        case_description.id = "case-description"
+        let status_header = document.createElement("h4");
+        status_header.title = "Установите чекбокс при успешном завершении сценария тест-кейса";
+        let status = document.createElement("input");
+        status.type = "checkbox";
+        let case_comment_header = document.createElement("h4");
+        let case_comment = document.createElement("textarea");
+        case_comment.id = "comment-text-area";
+        case_comment.className = "edit-textarea";
+
+        id.innerHTML = records[recordIndex].id;
+        name.innerHTML = records[recordIndex].name;
+        scenario_header.innerHTML = "Тестовый сценарий";
+        scenario.innerHTML = records[recordIndex].scenario.replace(/\n/g, "<br />");
+        case_description_header.innerHTML = "Описание тест-кейса";
+        case_description.innerHTML = records[recordIndex].case_description.replace(/\n/g, "<br />");
+        status_header.innerHTML = "Статус успешности выполнения";
+        case_comment_header.innerHTML = "Комментарий";
+
+
+
+        element.appendChild(id);
+        element.appendChild(name);
+        element.append(case_description_header);
+        element.append(case_description);
+        element.append(scenario_header);
+        element.append(scenario);
+        element.append(status_header);
+        element.append(status);
+        element.append(case_comment_header);
+        element.append(case_comment);
+
+        testCasesList.appendChild(element);
+    }
+}
+
+function EndTestPlan(projectId, testPlanId, runId) {
+    let testCasesList = document.getElementById("test-cases");
+    var strDateTime = new Date().toLocaleString();
+
+    let data = { "cases": [] }
+    for (i = 0; i < testCasesList.children.length; i++) {
+        let testCase = testCasesList.children.item(i)
+        let case_id = testCase.children.item(0).innerText
+        let result = testCase.children.item(7).checked ? 'Success' : 'Fail'
+        let comment = testCase.children.item(9).value
+
+        data["cases"].push({ "case_id": case_id, "result": result, "datetime": strDateTime, "run_id": runId, "comment": comment })
+    }
+    console.log(data["cases"]);
+    console.log(JSON.stringify(data))
+    let response = post_request(window.location.href + "/insert", JSON.stringify(data));
+    window.location.href = "http://" + window.request_url + "/project/" + projectId + "/plan/" + testPlanId
 }

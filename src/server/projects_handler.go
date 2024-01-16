@@ -181,6 +181,10 @@ func (server *Server) ProjectsInsertHandler(responseWriter http.ResponseWriter, 
 				Name:  "Name",
 				Value: fmt.Sprintf("'%s'", string(projectName)),
 			},
+			{
+				Name:  "Archived",
+				Value: "'false'",
+			},
 		},
 	})
 

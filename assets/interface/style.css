@@ -239,6 +239,66 @@ button:hover {
     .list-item.dragging :where(.details, i) {
         opacity: 0;
     }
+
+    .run-list-item {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        border: 2px gray solid;
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .run-list-item span {
+        margin: 10px;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 30%;
+        max-width: 30%;
+        display: flex;
+        align-items: center;
+    }
+
+    .run-list-item div {
+        display: flex;
+        overflow: hidden;
+    }
+
+    .run-list-item div span {
+        color: white;
+        border: 1px white solid;
+        border-radius: 30px;
+        min-width: fit-content;
+        max-width: fit-content;
+        padding: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        text-overflow: initial;
+    }
+
+    .run-list-item span:first-child {
+        min-width: 100px;
+        max-width: 100px;
+    }
+
+    .run-list-item:hover {
+        background-color: rgb(90, 90, 90);
+    }
+
+    .run-list-item.dragging {
+        opacity: 0;
+    }
+
+    .run-list-item.dragging :where(.details, i) {
+        opacity: 0;
+    }
+
+    .run-list-item input[type=checkbox] {
+        width: 20;
+        height: 20;
+    }
+
 }
 
 .test-page-element {
@@ -426,4 +486,17 @@ button:hover {
 .satistics-item.text span {
     margin-left: 10px;
     font-size: xx-large;
+}
+
+.test-plan-run {
+    width: 300px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.runs table {
+    color: white;
+    width: 100%;
 }

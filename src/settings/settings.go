@@ -14,6 +14,7 @@ const (
 	InterfaceProjectStatisticsHTML = "assets/interface/project_statistics.html"
 	InterfaceCaseHTML              = "assets/interface/case.html"
 	InterfacePlanHTML              = "assets/interface/plan.html"
+	InterfacePlanRunHTML           = "assets/interface/plan_run.html"
 	InterfaceStylePath             = "assets/interface/style.css"
 	InterfaceScriptPath            = "assets/interface/script.js"
 )

@@ -20,6 +20,7 @@ const (
 	ServerProjectsEndpoint       = "/{token}/projects"
 	ServerProjectsSelectEndpoint = "/{token}/projects/get"
 	ServerProjectsInsertEndpoint = "/{token}/projects/insert"
+	ServerProjectsDeleteEndpoint = "/{token}/projects/delete"
 
 	ServerProjectCommentsSelectEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/get"
 	ServerProjectCommentsInsertEndpoint = "/{token}/project/{projid:[0-9]+}/{type:[a-z]+}/{objId:[0-9]+}/comments/insert"
@@ -41,6 +42,7 @@ const (
 	ServerProjectCasesEndpoint       = "/{token}/project/{id:[0-9]+}/cases"
 	ServerProjectCasesSelectEndpoint = "/{token}/project/{id:[0-9]+}/cases/get"
 	ServerProjectCasesInsertEndpoint = "/{token}/project/{id:[0-9]+}/cases/insert"
+	ServerProjectCasesDeleteEndpoint = "/{token}/project/{id:[0-9]+}/cases/delete"
 	ServerProjectCaseEndpoint        = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}"
 	ServerProjectCaseSelectEndpoint  = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}/get"
 	ServerProjectCaseUpdateEndpoint  = "/{token}/project/{id:[0-9]+}/case/{caseId:[0-9]+}/update"
@@ -48,6 +50,7 @@ const (
 	ServerProjectPlansEndpoint          = "/{token}/project/{id:[0-9]+}/plans"
 	ServerProjectPlansSelectEndpoint    = "/{token}/project/{id:[0-9]+}/plans/get"
 	ServerProjectPlansInsertEndpoint    = "/{token}/project/{id:[0-9]+}/plans/insert"
+	ServerProjectPlansDeleteEndpoint    = "/{token}/project/{id:[0-9]+}/plans/delete"
 	ServerProjectPlanEndpoint           = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}"
 	ServerProjectPlanSelectEndpoint     = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/get"
 	ServerProjectPlanUpdateEndpoint     = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/update"
@@ -60,4 +63,8 @@ const (
 	ServerPlanTagsSelectEndpoint = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/tags/get"
 	ServerPlanTagsInsertEndpoint = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/tags/insert"
 	ServerPlanTagsDeleteEndpoint = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/tags/delete"
+
+	ServerProjectPlanRunEndpoint       = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/run"
+	ServerProjectPlanRunGetEndpoint    = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/run/get"
+	ServerProjectPlanRunInsertEndpoint = "/{token}/project/{id:[0-9]+}/plan/{planId:[0-9]+}/run/insert"
 )

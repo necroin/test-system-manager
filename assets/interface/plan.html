@@ -15,7 +15,8 @@
             <select id="append-case-select"></select>
             <div class="dialog-buttons">
                 <button onclick="window.close_dialog('append-dialog', 'append-dialog-overlay')">Отменить</button>
-                <button onclick="window.AppendTestCase('{{.ProjectId}}'); window.GetTestPlan('{{.ProjectId}}')">Добавить</button>
+                <button
+                    onclick="window.AppendTestCase('{{.ProjectId}}'); window.GetTestPlan('{{.ProjectId}}')">Добавить</button>
             </div>
         </div>
     </div>
@@ -99,20 +100,41 @@
                         <span>Комментарии</span>
                     </div>
                     <textarea type="text" id="plan-comment-input" class="edit-textarea"></textarea>
-                    <button type="submit" onclick="window.AddPlanComment('{{.ProjectId}}', '{{.TestPlanId}}') ">Комментировать</button>
+                    <button type="submit"
+                        onclick="window.AddPlanComment('{{.ProjectId}}', '{{.TestPlanId}}') ">Комментировать</button>
                     <div id="plan-comments-list" class="list"></div>
                 </div>
-            </div>
-            <div class="test-page-element tags">
-                <div class="edit-header">
-                    <span class="edit-header-text">Тэги</span>
+                <!-- <div class="test-page-element runs">
+                    <div class="edit-header">
+                        <span>Запуски</span>
+                    </div>
+                    <div id="test-runs" class="list"></div>
+                </div> -->
+                <div class="test-page-element runs">
+                    <div class="edit-header">
+                        <span>Запуски таблица</span>
+                    </div>
+                    <table id="test-runs-table"></table>
                 </div>
-                <span id="tag-adder">
-                    <input type="text" id="settings-tags-input">
-                    <button onclick="window.AddTestCaseTag('{{.ProjectId}}')">Добавить</button>
-                </span>
-                <div id="tags" class="with-text-placeholder tags-list"></div>
-                <span class="text-placeholder settings-item-content">Нет тэгов</span>
+            </div>
+            <div>
+                <div class="test-page-element tags">
+                    <div class="edit-header">
+                        <span class="edit-header-text">Тэги</span>
+                    </div>
+                    <span id="tag-adder">
+                        <input type="text" id="settings-tags-input">
+                        <button onclick="window.AddTestPlanTag('{{.ProjectId}}')">Добавить</button>
+                    </span>
+                    <div id="tags" class="with-text-placeholder tags-list"></div>
+                    <span class="text-placeholder settings-item-content">Нет тэгов</span>
+                </div>
+                <div id="test-plan-run" class="test-page-element test-plan-run">
+                    <span class="test-page-element-header">Запуск тест-плана</span>
+                    <div>
+                        <button onclick="window.RunTestPlan()">Поехали</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

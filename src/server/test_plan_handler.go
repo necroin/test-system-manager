@@ -89,6 +89,7 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 	data := TestPlanDescriptor{
 		Description: &description,
 		TestCases:   []TestPlanDescriptorCases{},
+		TestRuns:    []TestRunDescriptorCases{},
 	}
 
 	testPlanTestCaseResponse := server.db.SelectRequest(&dbi.Request{
@@ -164,6 +165,57 @@ func (server *Server) ProjectPlanSelectHandler(responseWriter http.ResponseWrite
 		data.TestCases = append(data.TestCases, TestPlanDescriptorCases{
 			Id:   testCaseId,
 			Name: testCaseResponse.Records[0].Fields["Name"],
+		})
+	}
+
+	statResponse := server.db.SelectRequest(&dbi.Request{
+		Table: "TSM_Stat",
+		Fields: []dbi.Field{
+			{
+				Name: "TestRunId",
+			},
+			{
+				Name: "TestCaseId",
+			},
+			{
+				Name: "Result",
+			},
+			{
+				Name: "Datetime",
+			},
+			{
+				Name: "Comment",
+			},
+		},
+		Filters: []dbi.Filter{
+			{
+				Name:     "ProjectId",
+				Operator: "=",
+				Value:    projectId,
+			},
+			{
+				Name:     "TestPlanId",
+				Operator: "=",
+				Value:    testPlanId,
+			},
+		},
+		
+	})
+	logger.Debug("%#v", statResponse)
+
+	if statResponse.Error != nil {
+		logger.Error("%s", statResponse.Error)
+		json.NewEncoder(responseWriter).Encode(statResponse)
+		return
+	}
+
+	for _, record := range statResponse.Records {
+		data.TestRuns = append(data.TestRuns, TestRunDescriptorCases{
+			Result: record.Fields["Result"],
+			TestCaseId: record.Fields["TestCaseId"],
+			TestRunId: record.Fields["TestRunId"],
+			Datetime: record.Fields["Datetime"],
+			Comment: record.Fields["Comment"],
 		})
 	}
 
