@@ -9,6 +9,10 @@
             {
                 "name": "Name",
                 "type": "string"
+            },
+            {
+                "name": "Archived",
+                "type": "string"
             }
         ],
         "primary_key": [

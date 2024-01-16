@@ -90,6 +90,10 @@ func main() {
 
 	server.AddHandler(settings.ServerGetProjectUserRoleEndpoint, server.GetProjectUserRoleHandler, "POST", "GET")
 
+	server.AddHandler(settings.ServerProjectPlanRunEndpoint, server.ProjectPlanRunHandler, "GET")
+	server.AddHandler(settings.ServerProjectPlanRunGetEndpoint, server.ProjectPlanRunSelectHandler, "POST", "GET")
+	server.AddHandler(settings.ServerProjectPlanRunInsertEndpoint, server.ProjectPlanRunInsertHandler, "POST", "GET")
+
 	go func() {
 		wg.Add(1)
 		defer wg.Done()
