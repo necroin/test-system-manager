@@ -236,14 +236,18 @@ function GetProjects() {
 
 function RenameProject(projectId) {
     let name = document.getElementById("settings-name-input").value
-    let response = post_request(window.request_url + "/project/" + projectId + "/rename", name)
-    location.reload()
+    if (name != "") {
+        let response = post_request(window.request_url + "/project/" + projectId + "/rename", name)
+        location.reload()
+    }
 }
 
 function AddProjectUser(projectId) {
     let user = document.getElementById("settings-collaborators-input").value
-    let response = post_request(window.request_url + "/project/" + projectId + "/collaborators/add", user)
-    location.reload()
+    if (user != "") {
+        let response = post_request(window.request_url + "/project/" + projectId + "/collaborators/add", user)
+        location.reload()
+    }
 }
 
 function DeleteProjectUser(projectId, user) {
@@ -780,7 +784,7 @@ function GetTestPlan(projectId) {
     for (runId in runIds) {
         console.log(1);
         let run_table = document.createElement("table");
-        //run_table.style = "width:100%";
+        run_table.style.border = "2px solid gray"
         let run_name_tr = document.createElement("tr");
         let run_name_th = document.createElement("th");
         run_name_th.innerHTML = "RunId" + runIds[runId];
@@ -789,8 +793,10 @@ function GetTestPlan(projectId) {
         for (recordIndex in runs) {
             if (runs[recordIndex].run_id == runIds[runId]) {
                 let case_tr = document.createElement("tr");
+                case_tr.style.display = "flex"
                 let case_table = document.createElement("table");
-
+                case_table.style.border = "1px solid gray"
+                case_table.style.margin = "10px"
                 let case_id_tr = document.createElement("tr");
                 let case_id_name_td = document.createElement("td");
                 let case_id_value_td = document.createElement("td");

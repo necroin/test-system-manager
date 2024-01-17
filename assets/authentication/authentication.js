@@ -8,31 +8,35 @@ function request(methood, url, data) {
 function auth() {
     let username = document.getElementById("auth-name").value
     let password = document.getElementById("auth-password").value
-    let data = JSON.stringify(
-        {
-            "username": username,
-            "password": password,
-        }
-    );
-    let response = request("POST", window.location.href+"/token", data)
-    open(response)
+    if (username != "" && password != "") {
+        let data = JSON.stringify(
+            {
+                "username": username,
+                "password": password,
+            }
+        );
+        let response = request("POST", window.location.href + "/token", data)
+        open(response)
+    }
 }
 
 function register() {
     let username = document.getElementById("auth-name").value
     let password = document.getElementById("auth-password").value
-    let data = JSON.stringify(
-        {
-            "username": username,
-            "password": password,
-        }
-    );
-    let response = request("POST", window.location.href+"/register", data)
-    open(response)
+    if (username != "" && password != "") {
+        let data = JSON.stringify(
+            {
+                "username": username,
+                "password": password,
+            }
+        );
+        let response = request("POST", window.location.href + "/register", data)
+        open(response)
+    }
 }
 
 function open(token) {
     if (token != "") {
-        window.location.pathname = "/"+token+"/projects"
+        window.location.pathname = "/" + token + "/projects"
     }
 }
