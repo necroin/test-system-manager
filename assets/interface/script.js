@@ -37,6 +37,7 @@ function AddProject() {
     let name = document.getElementById("create-dialog-name").value
     if (name != "") {
         let response = post_request(window.location.href + "/insert", name)
+        console.log(response)
         GetProjects()
         close_dialog('create-dialog', 'create-dialog-overlay')
     }

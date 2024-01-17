@@ -217,6 +217,22 @@ func (server *Server) ProjectsInsertHandler(responseWriter http.ResponseWriter, 
 		json.NewEncoder(responseWriter).Encode(projectUserResponse)
 		return
 	}
+
+	idResponse := server.db.SelectRequest(&dbi.Request{
+		Table: "Projects",
+		Fields: []dbi.Field{{
+			Name: "MAX(Id) as Id",
+		}},
+	})
+
+	if idResponse.Error != nil {
+		logger.Error("%s", idResponse.Error)
+		json.NewEncoder(responseWriter).Encode(idResponse)
+		return
+	}
+
+	newId := idResponse.Records[0].Fields["Id"]
+	responseWriter.Write([]byte(newId))
 }
 
 func (server *Server) ProjectsDeleteHandler(responseWriter http.ResponseWriter, request *http.Request) {
